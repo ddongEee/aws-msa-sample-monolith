@@ -1,0 +1,88 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.0' apply false
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE' apply false
+    id 'java'
+}
+
+group = 'com.aws.peach'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    bootJar.enabled = false
+    jar.enabled = true
+
+    group = 'com.aws.peach'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '1.8'
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+    }
+}
+
+project(':interface') {
+    bootJar.enabled = true
+    bootJar.archiveFileName = "peach-app.jar"
+    jar.enabled = false
+    dependencies {
+        implementation project(':application')
+        implementation project(':domain')
+        implementation project(':infrastructure')
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.kafka:spring-kafka:2.7.2'
+    }
+}
+
+project(':application') {
+    dependencies {
+        implementation project(':domain')
+        //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    }
+}
+
+project(':domain') {
+    dependencies {
+        implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
+        //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation group: 'com.github.derjust', name: 'spring-data-dynamodb', version: '5.1.0'
+    }
+}
+
+project(':infrastructure') {
+    dependencies {
+        //implementation project(':interface')
+        implementation project(':application')
+        implementation project(':domain')
+        implementation group: 'com.github.derjust', name: 'spring-data-dynamodb', version: '5.1.0'
+        implementation 'org.springframework.kafka:spring-kafka'
+        runtimeOnly 'mysql:mysql-connector-java'
+        //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+
+//        implementation group: 'software.amazon.awssdk', name: 'auth', version: '2.16.92'
+//        implementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.12.14'
+        //implementation platform('software.amazon.awssdk:bom:2.15.0')
+        //implementation 'software.amazon.awssdk:sts'
+//        implementation 'software.amazon.awssdk:dynamodb'
+    }
+}

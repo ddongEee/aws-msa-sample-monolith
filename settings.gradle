@@ -1,0 +1,5 @@
+rootProject.name = 'aws-msa-sample-monolith'
+include ':interface'
+include ':application'
+include ':domain'
+include ':infrastructure'

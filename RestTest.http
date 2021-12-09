@@ -1,0 +1,11 @@
+#### 주문
+POST http://localhost:8080/orders?item=coffee&orderedBy=Haksung
+Accept: application/json
+
+#### 리스트
+GET http://localhost:8080/orders?orderedBy=Haksung
+Accept: application/json
+
+#### 취소
+PUT http://localhost:8080/orders/15/cancel
+Accept: application/json
