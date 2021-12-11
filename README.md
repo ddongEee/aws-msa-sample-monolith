@@ -13,8 +13,6 @@
 |3|배송조회|GET /shipment|
 |4|배송시작|PUT /shipment|
 
-
-
 ## Cloud Architecture (AWS) 살펴보기
 <img src="doc/img/aws-architecture.png">
 
@@ -24,7 +22,9 @@
 ## AWS EKS 환경에 배포하기
 아래 가이드에 따라하면 AWS EKS 환경에서 배포에 배포 할 수 있습니다. 
 
-- 01. EKS Cluster 생성
-- 02. CI/CD 생성
-- 03. 애플리케이션 배포하기
+- EKS Cluster 생성
+- 애플리케이션 개발을 위한 환경 구성
+- CI/CD 구성하기
+- 애플리케이션 빌드 및 배포 (CI/CD)  
+- 애플리케이션 모니터링
 
