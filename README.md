@@ -22,3 +22,7 @@ event driven microservice
 - spring boot
 - kafka
 - lombok
+
+
+# Architecture
+<img src="doc/img/aws-architecture.png">
