@@ -1,28 +1,9 @@
-# peach
-event driven microservice
-# 프로젝트 셋팅
-- (임시) application vmOption 에 아래 설정
-    - todo : 환경 구분하기
-    - todo : 다른방식으로 secret 주입
-```
--Dspring.config.location="file:///Users/kmhak/.testprops/application.properties"
-```
+# aws-msa-monolith-sample
+이 프로젝트는 spring framework를 이용하여 엔터프라이즈 환경에서 재 사용될 수 있는 예제코드 입니다. 
+특히, 마이크로서비스 간의 메시징 처리 구현 시 이 프로젝트가 참고 하세요.
 
-# Setting local Kafka via docker
-
-
-
-# 기타 소소한 project 기본 셋팅
-- Edit custom vm options : todo : (업데이트 하기)
-- Show excluded file 를 "off"
-
-# 적용된 기술 및 개념
-- layered clean architecture
-- java8 ?  
-- spring boot
-- kafka
-- lombok
-
-
-# Architecture
+## Cloud Architecture (AWS)
 <img src="doc/img/aws-architecture.png">
+
+## Microservices Architecture
+<img src="doc/img/high-level-microservice-architecture.png">
