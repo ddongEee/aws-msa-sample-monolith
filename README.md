@@ -6,6 +6,14 @@
 - Dead Letter 처리 모니터링 및 관리 방안
 
 ## 어떤 기능을 제공하는 애플리케이션인가요?
+|번호|기능|API|
+|------|---|---|
+|1|주문요청|POST /order|
+|2|결제완료|POST /pay|
+|3|배송조회|GET /shipment|
+|4|배송시작|PUT /shipment|
+
+
 
 ## Cloud Architecture (AWS) 살펴보기
 <img src="doc/img/aws-architecture.png">
