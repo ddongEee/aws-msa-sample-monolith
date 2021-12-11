@@ -1,9 +1,22 @@
 # aws-msa-monolith-sample
-이 프로젝트는 spring framework를 이용하여 엔터프라이즈 환경에서 재 사용될 수 있는 예제코드 입니다. 
-특히, 마이크로서비스 간의 메시징 처리 구현 시 이 프로젝트가 참고 하세요.
+이 프로젝트는 엔터프라이즈 환경에서 AWS MSK 를 기반의 메시징 처리 예제 코드를 포함하고 있습니다. 
 
-## Cloud Architecture (AWS)
+## 목표
+- 마이크로서비스 간에 메시징에 대한 이해
+- Dead Letter 처리 모니터링 및 관리 방안
+
+## 어떤 기능을 제공하는 애플리케이션인가요?
+
+## Cloud Architecture (AWS) 살펴보기
 <img src="doc/img/aws-architecture.png">
 
-## Microservices Architecture
+## Microservices Architecture 
 <img src="doc/img/high-level-microservice-architecture.png">
+
+## AWS EKS 환경에 배포하기
+아래 가이드에 따라하면 AWS EKS 환경에서 배포에 배포 할 수 있습니다. 
+
+- 01. EKS Cluster 생성
+- 02. CI/CD 생성
+- 03. 애플리케이션 배포하기
+
