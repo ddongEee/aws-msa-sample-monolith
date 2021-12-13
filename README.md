@@ -1,24 +1,30 @@
-# peach
-event driven microservice
-# 프로젝트 셋팅
-- (임시) application vmOption 에 아래 설정
-    - todo : 환경 구분하기
-    - todo : 다른방식으로 secret 주입
-```
--Dspring.config.location="file:///Users/kmhak/.testprops/application.properties"
-```
+# aws-msa-monolith-sample
+이 프로젝트는 엔터프라이즈 환경에서 AWS MSK 를 기반의 메시징 처리 예제 코드를 포함하고 있습니다. 
 
-# Setting local Kafka via docker
+## 목표
+- 마이크로서비스 간에 메시징에 대한 이해
+- Dead Letter 처리 모니터링 및 관리 방안
 
+## 어떤 기능을 제공하는 애플리케이션인가요?
+|번호|기능|API|
+|------|---|---|
+|1|주문요청|POST /order|
+|2|결제완료|POST /pay|
+|3|배송조회|GET /shipment|
+|4|배송시작|PUT /shipment|
 
+## Cloud Architecture (AWS) 살펴보기
+<img src="doc/img/aws-architecture.png">
 
-# 기타 소소한 project 기본 셋팅
-- Edit custom vm options : todo : (업데이트 하기)
-- Show excluded file 를 "off"
+## Microservices Architecture 
+<img src="doc/img/high-level-microservice-architecture.png">
 
-# 적용된 기술 및 개념
-- layered clean architecture
-- java8 ?  
-- spring boot
-- kafka
-- lombok
+## AWS EKS 환경에 배포하기
+아래 가이드에 따라하면 AWS EKS 환경에서 배포에 배포 할 수 있습니다. 
+
+- EKS Cluster 생성
+- 애플리케이션 개발을 위한 환경 구성
+- CI/CD 구성하기
+- 애플리케이션 빌드 및 배포 (CI/CD)  
+- 애플리케이션 모니터링
+
