@@ -1,11 +1,13 @@
-package com.aws.peach.domain.order.vo;
+package com.aws.peach.application;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
 @Getter
-public class ShippingInformation {
+@Builder
+@AllArgsConstructor
+public class ShippingRequest {
 
     private String country;
     private String city;

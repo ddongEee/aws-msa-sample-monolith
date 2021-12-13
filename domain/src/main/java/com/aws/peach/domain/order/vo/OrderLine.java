@@ -1,5 +1,10 @@
 package com.aws.peach.domain.order.vo;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Builder
+@Getter
 public class OrderLine {
 
     private OrderProduct orderProduct;
