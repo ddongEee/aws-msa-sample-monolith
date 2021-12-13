@@ -22,8 +22,14 @@ public class Order {
     private OrderState orderState;
 
     private Date orderDate;
+
     private ShippingInformation shippingInformation;
+
     public String getOrderNo(){
         return this.orderNo.getNumber();
+    }
+
+    public void payComplete() {
+        this.orderState = OrderState.PAY_COMPLETE;
     }
 }
