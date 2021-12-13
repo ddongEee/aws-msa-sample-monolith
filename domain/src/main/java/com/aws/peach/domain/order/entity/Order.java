@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class Order extends Orderer {
+public class Order {
 
     private OrderNo orderNo;
 
@@ -19,12 +19,10 @@ public class Order extends Orderer {
 
     private List<OrderLine> orderLines;
 
-    private OrderState state;
+    private OrderState orderState;
 
     private Date orderDate;
-
     private ShippingInformation shippingInformation;
-
     public String getOrderNo(){
         return this.orderNo.getNumber();
     }

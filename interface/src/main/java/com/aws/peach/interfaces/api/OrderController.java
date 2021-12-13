@@ -1,9 +1,9 @@
 package com.aws.peach.interfaces.api;
 
 import com.aws.peach.application.Address;
-import com.aws.peach.application.OrderProduct;
+import com.aws.peach.application.OrderRequestLine;
 import com.aws.peach.application.PlaceOrderService;
-import com.aws.peach.application.ShippingInfo;
+import com.aws.peach.application.ShippingRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,23 +25,23 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<String> placeOrder() {
-        List<OrderProduct> orderProducts = new ArrayList<>();
-        orderProducts.add(OrderProduct.of("yellowPeach", 2));
-        orderProducts.add(OrderProduct.of("whitePeach", 1));
+        List<OrderRequestLine> orderProducts = new ArrayList<>();
+
+        orderProducts.add(OrderRequestLine.of("01", 5));
 
         PlaceOrderRequest request = PlaceOrderRequest.builder()
-                .orderProducts(orderProducts)
+                .orderLines(orderProducts)
                 .orderer("HeeJong")
-                .shippingInfo(ShippingInfo.builder()
-                        .address(Address.builder()
-                                .zipCode("12300")
-                                .address1("Seoul")
-                                .address2("Songpa")
-                                .build())
-                        .receiver("Haksung")
+                .shippingRequest(ShippingRequest.builder()
+                        .country("대한민국")
+                        .receiver("김학성")
+                        .city("서울")
+                        .zipCode("12345")
+                        .telephoneNumber("01012341234")
                         .build())
                 .build();
         String orderId = placeOrderService.placeOrder(request);
+
         return ResponseEntity.ok(orderId);
     }
 }

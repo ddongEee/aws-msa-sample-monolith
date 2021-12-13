@@ -1,4 +1,5 @@
 package com.aws.peach.domain.order.vo;
 
-public class OrderState {
+public enum OrderState {
+    CREATED, PAY_COMPLETE, READY_DELIVERY,  
 }
