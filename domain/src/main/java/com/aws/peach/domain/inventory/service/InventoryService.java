@@ -1,4 +1,4 @@
-package com.aws.peach.domain.inventory;
+package com.aws.peach.domain.inventory.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
