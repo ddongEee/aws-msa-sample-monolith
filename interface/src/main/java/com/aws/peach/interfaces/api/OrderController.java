@@ -1,10 +1,10 @@
 package com.aws.peach.interfaces.api;
 
-import com.aws.peach.application.Address;
-import com.aws.peach.application.OrderRequestLine;
+import com.aws.peach.application.OrderViewService;
 import com.aws.peach.application.PlaceOrderService;
-import com.aws.peach.application.ShippingRequest;
+import com.aws.peach.domain.order.entity.Order;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +18,13 @@ import static com.aws.peach.application.PlaceOrderService.*;
 @RequestMapping("/orders")
 public class OrderController {
     private final PlaceOrderService placeOrderService;
+    private final OrderViewService orderViewService;
 
-    public OrderController(final PlaceOrderService placeOrderService) {
+    public OrderController(final PlaceOrderService placeOrderService,
+                           final OrderViewService orderViewService
+    ) {
         this.placeOrderService = placeOrderService;
+        this.orderViewService = orderViewService;
     }
 
     @PostMapping
@@ -43,5 +47,11 @@ public class OrderController {
         String orderId = placeOrderService.placeOrder(request);
 
         return ResponseEntity.ok(orderId);
+    }
+
+    @GetMapping
+    public ResponseEntity<Order> getOrder(){
+        Order order = this.orderViewService.getOrder("1");
+        return ResponseEntity.ok(order);
     }
 }

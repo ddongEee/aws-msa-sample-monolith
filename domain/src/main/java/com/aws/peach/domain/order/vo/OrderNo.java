@@ -6,6 +6,7 @@ import lombok.Getter;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Builder
 @Getter
 public class OrderNo implements Serializable {
 

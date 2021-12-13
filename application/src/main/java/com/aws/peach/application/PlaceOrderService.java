@@ -95,4 +95,24 @@ public class PlaceOrderService {
             return this.orderLines.stream().map( m -> m.getProductId()).collect(Collectors.toList());
         }
     }
+
+    @Getter
+    @AllArgsConstructor(staticName = "of")
+    public static class OrderRequestLine {
+        private String productId;
+        private int quantity;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class ShippingRequest {
+
+        private String country;
+        private String city;
+        private String zipCode;
+        private String telephoneNumber;
+        private String receiver;
+    }
+
 }

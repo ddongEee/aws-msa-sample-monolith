@@ -1,9 +1,5 @@
 package com.aws.peach.infrastructure.dummy;
 
-import com.aws.peach.application.OrderRequestLine;
-import com.aws.peach.domain.member.Member;
-import com.aws.peach.domain.member.MemberRepository;
-import com.aws.peach.domain.product.Products;
 import com.aws.peach.domain.product.entity.Product;
 import com.aws.peach.domain.product.repository.ProductRepository;
 import org.springframework.stereotype.Component;
