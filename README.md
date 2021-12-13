@@ -10,6 +10,8 @@ event driven microservice
 
 # Setting local Kafka via docker
 
+# Layered Architecture
+- 해당 프로젝트는 DDD(Domain Driven Design)의 전략적인 패턴을 따라 구성되어 있으며, 각 Layer는 별도의 프로젝트로 구성되어 있습니다.
 
 
 # 기타 소소한 project 기본 셋팅
