@@ -1,9 +1,6 @@
 package com.aws.peach.domain.inventory.entity;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -11,6 +8,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @EqualsAndHashCode
+@ToString
 public class Inventory {
     private String productId;
     private LocalDate date;
