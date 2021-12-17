@@ -1,0 +1,53 @@
+package com.aws.peach.application.inventory;
+
+import com.aws.peach.domain.inventory.entity.Inventory;
+import com.aws.peach.domain.inventory.repository.InventoryRepository;
+import com.google.common.base.Preconditions;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Component
+public class InventoryService {
+    private final InventoryRepository repository;
+
+    public InventoryService(final InventoryRepository repository) {
+        this.repository = repository;
+    }
+    public boolean isOutOfStock(List<CheckOrderProduct> orderProducts) {
+        return false;
+    }
+
+    public int getCountFor(final String productId, final LocalDate date) {
+        Preconditions.checkNotNull(productId);
+        Preconditions.checkNotNull(date);
+        Inventory inventory = repository.findByProductIdAndDate(productId, date);
+        if(inventory == null) {
+            return 0;
+        }
+        return inventory.getCount();
+    }
+
+    public Inventory setInventoryCountFor(String productId, LocalDate date, int newInventoryCount) {
+        Preconditions.checkNotNull(productId);
+        Preconditions.checkNotNull(date);
+        if(newInventoryCount < 0) {
+            throw new IllegalArgumentException("newInventoryCount is lower then 0");
+        }
+        Inventory newInventory = Inventory.builder()
+                .productId(productId)
+                .date(date)
+                .count(newInventoryCount)
+                .build();
+        return repository.save(newInventory);
+    }
+
+    @AllArgsConstructor(staticName = "of")
+    public static final class CheckOrderProduct {
+        private String productId;
+        private int quantity;
+    }
+
+}

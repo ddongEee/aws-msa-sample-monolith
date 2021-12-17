@@ -1,6 +1,6 @@
 package com.aws.peach.application;
 
-import com.aws.peach.domain.inventory.service.InventoryService;
+import com.aws.peach.application.inventory.InventoryService;
 import com.aws.peach.domain.member.Member;
 import com.aws.peach.domain.member.MemberRepository;
 import com.aws.peach.domain.order.entity.Order;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.aws.peach.domain.inventory.service.InventoryService.*;
+import static com.aws.peach.application.inventory.InventoryService.*;
 
 @Component
 public class PlaceOrderService {

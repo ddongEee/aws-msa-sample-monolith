@@ -1,9 +1,10 @@
 package com.aws.peach.domain.inventory.repository;
 
-import com.aws.peach.domain.inventory.Inventory;
-import com.aws.peach.domain.order.entity.Order;
-import com.aws.peach.domain.order.vo.OrderNo;
+import com.aws.peach.domain.inventory.entity.Inventory;
+
+import java.time.LocalDate;
 
 public interface InventoryRepository {
-    public Inventory get(final String inventoryId);
+    Inventory findByProductIdAndDate(String productId, LocalDate localDate);
+    Inventory save(Inventory inventory);
 }
