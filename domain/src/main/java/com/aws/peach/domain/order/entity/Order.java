@@ -25,7 +25,7 @@ public class Order {
     }
 
     public void payComplete() {
-        this.orderState = OrderState.PAY_COMPLETE;
+        this.orderState = OrderState.PAID;
     }
 
     public String getOrdererId() {
