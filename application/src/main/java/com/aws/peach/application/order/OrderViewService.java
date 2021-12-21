@@ -13,6 +13,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.aws.peach.domain.order.statement.OrderStatementExporter.*;
+import static com.aws.peach.domain.order.statement.OrderStatementExporter.GroupedOrderStatement.*;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class OrderViewService {
 
@@ -30,7 +37,7 @@ public class OrderViewService {
     }
 
     public List<GroupedOrderStatementDto> listUnpaidOrderByDate(final LocalDate targetDate) {
-        List<OrderStatementExporter.GroupedOrderStatement> groupedOrderStatements = orderStatementExporter.loadUnpaidGroupedOrderStatementsByDate(targetDate);
+        List<GroupedOrderStatement> groupedOrderStatements = orderStatementExporter.loadUnpaidGroupedOrderStatementsByDate(targetDate);
         return groupedOrderStatements.stream()
                 .map(GroupedOrderStatementDto::create)
                 .collect(Collectors.toList());
@@ -45,7 +52,7 @@ public class OrderViewService {
         private final int totalPayablePrice;
         private final List<OrderStatementDto> orderStatements;
 
-        private static GroupedOrderStatementDto create(OrderStatementExporter.GroupedOrderStatement groupedOrderStatement) {
+        private static GroupedOrderStatementDto create(GroupedOrderStatement groupedOrderStatement) {
             return builder()
                     .groupedOrdererMemberId(groupedOrderStatement.getGroupedOrdererMemberId())
                     .groupedOrdererName(groupedOrderStatement.getGroupedOrdererName())
@@ -62,7 +69,7 @@ public class OrderViewService {
             private final String orderedProductNameAndQuantities;
             private final int calculatedPrice;
 
-            private static OrderStatementDto create(final OrderStatementExporter.GroupedOrderStatement.OrderStatement orderStatement) {
+            private static OrderStatementDto create(final OrderStatement orderStatement) {
                 return builder()
                         .orderNumber(orderStatement.getOrderNumber())
                         .orderedProductNameAndQuantities(orderStatement.getOrderedProductNameAndQuantities())
@@ -70,7 +77,7 @@ public class OrderViewService {
                         .build();
             }
 
-            private static List<OrderStatementDto> createList(List<OrderStatementExporter.GroupedOrderStatement.OrderStatement> orderStatements) {
+            private static List<OrderStatementDto> createList(List<OrderStatement> orderStatements) {
                 return orderStatements.stream()
                         .map(OrderStatementDto::create)
                         .collect(Collectors.toList());
