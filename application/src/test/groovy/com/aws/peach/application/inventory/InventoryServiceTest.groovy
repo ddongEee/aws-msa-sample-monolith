@@ -2,6 +2,7 @@ package com.aws.peach.application.inventory
 
 import com.aws.peach.domain.inventory.entity.Inventory
 import com.aws.peach.domain.inventory.repository.InventoryRepository
+import com.google.common.collect.Lists
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -119,6 +120,55 @@ class InventoryServiceTest extends Specification {
 
         then:
         thrown(IllegalArgumentException)
+    }
 
+    def "inventory out of order check happy case"() {
+        given:
+        InventoryRepository repository = Stub()
+        repository.findByProductIdAndDate("GOOD-PEACH-1", LocalDate.now()) >> makeInventoryOfToday("GOOD-PEACH-1", 5)
+        repository.findByProductIdAndDate("GOOD-PEACH-2", LocalDate.now()) >> makeInventoryOfToday("GOOD-PEACH-2", 5)
+        repository.findByProductIdAndDate("BAD-PEACH-1", LocalDate.now()) >> makeInventoryOfToday("BAD-PEACH-1", 10)
+        InventoryService service = new InventoryService(repository)
+
+        when:
+        List<InventoryService.CheckOrderProduct> checkOrderProducts = Lists.asList(
+                InventoryService.CheckOrderProduct.of("GOOD-PEACH-1", 3),
+                InventoryService.CheckOrderProduct.of("GOOD-PEACH-2", 5),
+                InventoryService.CheckOrderProduct.of("BAD-PEACH-1", 8)
+        )
+        boolean result = service.isOutOfStock(checkOrderProducts)
+
+        then:
+        !result
+
+    }
+
+    def "if some of inventory is out of order return true"() {
+        given:
+        InventoryRepository repository = Stub()
+        repository.findByProductIdAndDate("GOOD-PEACH-1", LocalDate.now()) >> makeInventoryOfToday("GOOD-PEACH-1", 5)
+        repository.findByProductIdAndDate("GOOD-PEACH-2", LocalDate.now()) >> makeInventoryOfToday("GOOD-PEACH-2", 5)
+        repository.findByProductIdAndDate("BAD-PEACH-1", LocalDate.now()) >> makeInventoryOfToday("BAD-PEACH-1", 5)
+        InventoryService service = new InventoryService(repository)
+
+        when:
+        List<InventoryService.CheckOrderProduct> checkOrderProducts = Lists.asList(
+                InventoryService.CheckOrderProduct.of("GOOD-PEACH-1", 3),
+                InventoryService.CheckOrderProduct.of("GOOD-PEACH-2", 5),
+                InventoryService.CheckOrderProduct.of("BAD-PEACH-1", 8)
+        )
+        boolean result = service.isOutOfStock(checkOrderProducts)
+
+        then:
+        result
+
+    }
+
+    static def makeInventoryOfToday(String productId, int quantity) {
+        return Inventory.builder()
+                .productId(productId)
+                .date(LocalDate.now())
+                .count(quantity)
+                .build()
     }
 }

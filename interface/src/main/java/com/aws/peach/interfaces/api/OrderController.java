@@ -1,7 +1,7 @@
 package com.aws.peach.interfaces.api;
 
-import com.aws.peach.application.OrderViewService;
-import com.aws.peach.application.PlaceOrderService;
+import com.aws.peach.application.order.OrderViewService;
+import com.aws.peach.application.order.PlaceOrderService;
 import com.aws.peach.domain.order.entity.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.aws.peach.application.PlaceOrderService.*;
+import static com.aws.peach.application.order.PlaceOrderService.*;
 
 @RestController
 @RequestMapping("/orders")

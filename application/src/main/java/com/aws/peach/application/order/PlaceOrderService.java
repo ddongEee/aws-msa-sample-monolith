@@ -1,9 +1,10 @@
-package com.aws.peach.application;
+package com.aws.peach.application.order;
 
 import com.aws.peach.application.inventory.InventoryService;
 import com.aws.peach.domain.member.Member;
 import com.aws.peach.domain.member.MemberRepository;
 import com.aws.peach.domain.order.entity.Order;
+import com.aws.peach.domain.order.exception.OutOfOrderException;
 import com.aws.peach.domain.order.repository.OrderRepository;
 import com.aws.peach.domain.order.vo.*;
 import com.aws.peach.domain.product.Products;
@@ -44,7 +45,7 @@ public class PlaceOrderService {
 
         // 01. 주문 요청 내용 중 상품의 재고를 확인 한다.
         if (inventoryService.isOutOfStock(checkOrderProducts)) {
-            return null;
+            throw new OutOfOrderException();
         }
 
         // 02. 상품 목록을 조회한다.
@@ -92,7 +93,7 @@ public class PlaceOrderService {
         private final List<OrderRequestLine> orderLines;    // 주문상품과 배송지 정보
         private ShippingRequest shippingRequest;
         public List<String> getProductIds(){
-            return this.orderLines.stream().map( m -> m.getProductId()).collect(Collectors.toList());
+            return this.orderLines.stream().map(OrderRequestLine::getProductId).collect(Collectors.toList());
         }
     }
 
