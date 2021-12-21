@@ -32,8 +32,8 @@ public class OrderViewService {
         return this.orderRepository.findById(orderId);
     }
 
-    public List<GroupedOrderStatementDto>  listOrderByDate(final LocalDate targetDate) {
-        List<GroupedOrderStatement> groupedOrderStatements = orderStatementExporter.loadByDate(targetDate);
+    public List<GroupedOrderStatementDto> listUnpaidOrderByDate(final LocalDate targetDate) {
+        List<GroupedOrderStatement> groupedOrderStatements = orderStatementExporter.loadUnpaidGroupedOrderStatementsByDate(targetDate);
         return groupedOrderStatements.stream()
                 .map(GroupedOrderStatementDto::create)
                 .collect(Collectors.toList());

@@ -25,12 +25,12 @@ public class FarmerController {
     }
 
     @GetMapping("/orders/today")
-    public List<GroupedOrderStatementDto> todayOrders() {
-        return ordersByDate(LocalDate.now());
+    public List<GroupedOrderStatementDto> listTodayUnpaidOrders() {
+        return listUnpaidOrdersByDate(LocalDate.now());
     }
 
     @GetMapping("/orders/by-date/{targetDate}")
-    public List<GroupedOrderStatementDto> ordersByDate(@PathVariable("targetDate") @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate targetDate) {
-        return orderViewService.listOrderByDate(targetDate);
+    public List<GroupedOrderStatementDto> listUnpaidOrdersByDate(@PathVariable("targetDate") @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate targetDate) {
+        return orderViewService.listUnpaidOrderByDate(targetDate);
     }
 }
