@@ -38,6 +38,10 @@ public class Order {
         return this.orderer.getName();
     }
 
+    public boolean isEqualDate(final LocalDate date) {
+        return date.isEqual(this.orderDate);
+    }
+
     public boolean isTodayOrder() {
         final LocalDate today = LocalDate.now();
         return today.isEqual(this.orderDate);

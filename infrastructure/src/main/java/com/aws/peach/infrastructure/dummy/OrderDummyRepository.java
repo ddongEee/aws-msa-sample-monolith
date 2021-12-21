@@ -67,7 +67,7 @@ public class OrderDummyRepository implements OrderRepository {
     @Override
     public List<Order> findByOrderDate(LocalDate targetDate) {
         return this.dummyOrders.stream()
-                .filter(Order::isTodayOrder)
+                .filter(o -> o.isEqualDate(targetDate))
                 .filter(Order::isUnPaid)
                 .collect(Collectors.toList());
     }
@@ -138,7 +138,7 @@ public class OrderDummyRepository implements OrderRepository {
                         .orderer(Orderer.builder().memberId("PeachMan").name("Lee Heejong").build())
                         .orderLines(Collections.singletonList(PEACH.makeOrderProduct(20)))
                         .shippingInformation(HAKSUNG_SHIPPING_INFORMATION.make())
-                        .orderState(OrderState.UNPAID)
+                        .orderState(OrderState.PAID)
                         .orderDate(LocalDate.now()) // 오늘
                         .build(),
                 Order.builder()
@@ -162,7 +162,7 @@ public class OrderDummyRepository implements OrderRepository {
                         .orderer(Orderer.builder().memberId("CookieMan").name("Kim Haksung").build())
                         .orderLines(Arrays.asList(PEACH.makeOrderProduct(5), GOLD_PEACH.makeOrderProduct(5)))
                         .shippingInformation(EUNJU_SHIPPING_INFORMATION.make())
-                        .orderState(OrderState.PAID) // 결제됨
+                        .orderState(OrderState.UNPAID) // 결제됨
                         .orderDate(LocalDate.now()) // 오늘
                         .build()
         );

@@ -2,14 +2,13 @@ package com.aws.peach.domain.order.statement;
 
 import com.aws.peach.domain.order.entity.Order;
 import com.aws.peach.domain.order.repository.OrderRepository;
-import com.aws.peach.domain.product.entity.Product;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class OrderStatementExporter {
