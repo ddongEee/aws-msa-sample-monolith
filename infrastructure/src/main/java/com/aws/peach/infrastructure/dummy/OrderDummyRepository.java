@@ -54,6 +54,7 @@ public class OrderDummyRepository implements OrderRepository {
                 .orderer(Orderer.builder().memberId("PeachMan").name("Lee Heejong").build())
                 .orderLines(orderLines)
                 .orderState(OrderState.PAID)
+                .orderDate(LocalDate.now())
                 .shippingInformation(ShippingInformation.builder()
                         .city("서울")
                         .telephoneNumber("01012341234")
