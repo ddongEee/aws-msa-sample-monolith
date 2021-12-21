@@ -1,4 +1,4 @@
-package com.aws.peach.application;
+package com.aws.peach.application.order;
 
 import com.aws.peach.domain.order.entity.Order;
 import com.aws.peach.domain.order.repository.OrderRepository;

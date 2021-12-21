@@ -17,13 +17,20 @@ public class InventoryService {
         this.repository = repository;
     }
     public boolean isOutOfStock(List<CheckOrderProduct> orderProducts) {
-        return false;
+        return orderProducts.stream().anyMatch(this::isOutOfStockTodayFor);
+    }
+
+    private boolean isOutOfStockTodayFor(CheckOrderProduct checkOrderProduct) {
+        Inventory inventoryForToday = repository.findByProductIdAndDate(checkOrderProduct.productId, LocalDate.now());
+        return inventoryForToday.getCount() < checkOrderProduct.quantity;
     }
 
     public int getCountFor(final String productId, final LocalDate date) {
         Preconditions.checkNotNull(productId);
         Preconditions.checkNotNull(date);
         Inventory inventory = repository.findByProductIdAndDate(productId, date);
+
+        // 해당 날짜의 재고가 입력되지 않았다.
         if(inventory == null) {
             return 0;
         }
