@@ -73,6 +73,18 @@ public class OrderDummyRepository implements OrderRepository {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Order> findByOrderNumberIn(List<String> orderNumbers) {
+        return dummyOrders.stream()
+                .filter(o -> orderNumbers.contains(o.getOrderNo()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void saveAll(List<Order> paidUpdatedOrders) {
+        // todo: 당장 적용필요 없음
+    }
+
     @AllArgsConstructor
     public enum DummyShippingInformation {
         HAKSUNG_SHIPPING_INFORMATION("Seoul", "010-1234-1234", "Kim HakSung", "Songpa", "101"),
@@ -133,14 +145,14 @@ public class OrderDummyRepository implements OrderRepository {
                         .orderLines(Collections.singletonList(PEACH.makeOrderProduct(10)))
                         .shippingInformation(HAKSUNG_SHIPPING_INFORMATION.make())
                         .orderState(OrderState.UNPAID) // todo : crayon : 어제 주문이지만 아직 결제가 안된 케이스 커버는?
-                        .orderDate(LocalDate.now().minusDays(1)) // 어제
+                        .orderDate(LocalDate.now()) // 어제
                         .build(),
                 Order.builder()
                         .orderNo(OrderNo.builder().number("2").build())
                         .orderer(Orderer.builder().memberId("PeachMan").name("Lee Heejong").build())
                         .orderLines(Collections.singletonList(PEACH.makeOrderProduct(20)))
                         .shippingInformation(HAKSUNG_SHIPPING_INFORMATION.make())
-                        .orderState(OrderState.PAID)
+                        .orderState(OrderState.UNPAID)
                         .orderDate(LocalDate.now()) // 오늘
                         .build(),
                 Order.builder()

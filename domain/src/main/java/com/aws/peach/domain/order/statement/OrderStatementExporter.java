@@ -19,7 +19,7 @@ public class OrderStatementExporter {
     }
 
     // http://blog.tremblay.pro/2019/08/map.html
-    public List<GroupedOrderStatement> loadByDate(final LocalDate targetDate) {
+    public List<GroupedOrderStatement> loadUnpaidGroupedOrderStatementsByDate(final LocalDate targetDate) {
         List<Order> orders = orderRepository.findByOrderDate(targetDate);
         final Map<String, GroupedOrderStatement> groupedOrderStatementByOrdererIdMap = new HashMap<>();
 

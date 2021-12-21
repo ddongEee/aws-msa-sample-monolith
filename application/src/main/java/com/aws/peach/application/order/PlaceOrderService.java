@@ -114,7 +114,6 @@ public class PlaceOrderService {
     @Getter
     @Builder
     @AllArgsConstructor
-    @EqualsAndHashCode
     public static class ShippingRequest {
         private String city;
         private String telephoneNumber;
