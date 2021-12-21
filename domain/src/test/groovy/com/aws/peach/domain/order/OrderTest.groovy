@@ -32,7 +32,7 @@ class OrderTest extends Specification {
                                                         .productName("좋은 복숭아")
                                                         .price(30_000)
                                                         .build())
-                                        .quantity(3)
+                                        .quantity(4)
                                         .build(),
                                 OrderLine.builder()
                                         .orderProduct(
@@ -61,6 +61,6 @@ class OrderTest extends Specification {
         Order.OrderLinesSummary summary = order.getOrderLinesSummary()
         then:
         summary.getShippingCharge() == 20_000
-        summary.getTotalPrice() == 30_000 * 3 + 10_000 * 5 + summary.getShippingCharge()
+        summary.getTotalPrice() == 30_000 * 4 + 10_000 * 5 + summary.getShippingCharge()
     }
 }
