@@ -6,10 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -27,7 +25,7 @@ public class Order {
     }
 
     public void payComplete() {
-        this.orderState = OrderState.PAY_COMPLETE;
+        this.orderState = OrderState.PAID;
     }
 
     public void checkedPaid() {

@@ -13,6 +13,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.aws.peach.domain.order.statement.OrderStatementExporter.*;
+import static com.aws.peach.domain.order.statement.OrderStatementExporter.GroupedOrderStatement.*;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class OrderViewService {
 
@@ -27,6 +34,56 @@ public class OrderViewService {
 
     public Order getOrder(final String orderId) {
         return this.orderRepository.findById(orderId);
+    }
+
+    public List<GroupedOrderStatementDto>  listOrderByDate(final LocalDate targetDate) {
+        List<GroupedOrderStatement> groupedOrderStatements = orderStatementExporter.loadByDate(targetDate);
+        return groupedOrderStatements.stream()
+                .map(GroupedOrderStatementDto::create)
+                .collect(Collectors.toList());
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static final class GroupedOrderStatementDto {
+        private final String groupedOrdererMemberId;
+        private final String groupedOrdererName;
+        private final int totalPayablePrice;
+        private final List<OrderStatementDto> orderStatements;
+
+        private static GroupedOrderStatementDto create(GroupedOrderStatement groupedOrderStatement) {
+            return builder()
+                    .groupedOrdererMemberId(groupedOrderStatement.getGroupedOrdererMemberId())
+                    .groupedOrdererName(groupedOrderStatement.getGroupedOrdererName())
+                    .totalPayablePrice(groupedOrderStatement.getTotalPayablePrice())
+                    .orderStatements(OrderStatementDto.createList(groupedOrderStatement.getOrderStatements()))
+                    .build();
+        }
+
+        @Builder
+        @Getter
+        @AllArgsConstructor(access = AccessLevel.PRIVATE)
+        public static final class OrderStatementDto {
+            private final String orderNumber;
+            private final String orderedProductNameAndQuantities;
+            private final int calculatedPrice;
+
+            private static OrderStatementDto create(final OrderStatement orderStatement) {
+                return builder()
+                        .orderNumber(orderStatement.getOrderNumber())
+                        .orderedProductNameAndQuantities(orderStatement.getOrderedProductNameAndQuantities())
+                        .calculatedPrice(orderStatement.getCalculatedPrice())
+                        .build();
+            }
+
+            private static List<OrderStatementDto> createList(List<OrderStatement> orderStatements) {
+                return orderStatements.stream()
+                        .map(OrderStatementDto::create)
+                        .collect(Collectors.toList());
+            }
+        }
+
     }
 
     public List<GroupedOrderStatementDto> listUnpaidOrderByDate(final LocalDate targetDate) {

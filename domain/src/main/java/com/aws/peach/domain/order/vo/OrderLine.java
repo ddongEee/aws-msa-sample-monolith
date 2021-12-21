@@ -1,7 +1,9 @@
 package com.aws.peach.domain.order.vo;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Builder
 @Getter

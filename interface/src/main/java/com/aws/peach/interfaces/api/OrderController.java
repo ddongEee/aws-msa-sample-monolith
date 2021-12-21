@@ -37,11 +37,11 @@ public class OrderController {
                 .orderLines(orderProducts)
                 .orderer("HeeJong")
                 .shippingRequest(ShippingRequest.builder()
-                        .country("대한민국")
-                        .receiver("김학성")
                         .city("서울")
-                        .zipCode("12345")
                         .telephoneNumber("01012341234")
+                        .receiver("정우영")
+                        .address1("송파구 문정동 70-6")
+                        .address2("202호")
                         .build())
                 .build();
         String orderId = placeOrderService.placeOrder(request);

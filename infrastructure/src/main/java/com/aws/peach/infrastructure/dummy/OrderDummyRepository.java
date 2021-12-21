@@ -38,7 +38,7 @@ public class OrderDummyRepository implements OrderRepository {
     @Override
     public Order findById(String orderId) {
         // 04. 제품 주문 정보를 생성한다.
-        List<OrderLine> orderLines = new ArrayList<OrderLine>();
+        List<OrderLine> orderLines = new ArrayList<>();
 
         orderLines.add(OrderLine.builder().orderProduct(
                 OrderProduct.builder()
@@ -49,19 +49,20 @@ public class OrderDummyRepository implements OrderRepository {
                 .build());
 
         // 05. 주문을 생성한다.
-        final Order order = Order.builder()
+        return Order.builder()
                 .orderNo(OrderNo.builder().number("1").build())
                 .orderer(Orderer.builder().memberId("PeachMan").name("Lee Heejong").build())
                 .orderLines(orderLines)
+                .orderState(OrderState.PAID)
+                .orderDate(LocalDate.now())
                 .shippingInformation(ShippingInformation.builder()
-                        .city("Seoul")
-                        .country("South Korea")
-                        .receiver("Kim HakSung")
-                        .telephoneNumber("010-1234-1234")
-                        .zipCode("12345").build())
-                .orderState(OrderState.PAY_COMPLETE)
+                        .city("서울")
+                        .telephoneNumber("01012341234")
+                        .receiver("정우영")
+                        .address1("송파구 문정동 70-6")
+                        .address2("202호")
+                        .build())
                 .build();
-        return order;
     }
 
     @Override
@@ -86,22 +87,23 @@ public class OrderDummyRepository implements OrderRepository {
 
     @AllArgsConstructor
     public enum DummyShippingInformation {
-        HAKSUNG_SHIPPING_INFORMATION("Seoul", "South Korea", "Kim HakSung", "010-1234-1234", "12345"),
-        EUNJU_SHIPPING_INFORMATION("Seoul", "South Korea", "Rho Eunju", "010-1234-1234", "78910");
+        HAKSUNG_SHIPPING_INFORMATION("Seoul", "010-1234-1234", "Kim HakSung", "Songpa", "101"),
+        EUNJU_SHIPPING_INFORMATION("Seoul", "010-1234-1234", "Rho Eunju", "Songpa", "101");
 
-        private final String country;
         private final String city;
-        private final String zipCode;
         private final String telephoneNumber;
         private final String receiver;
+        private final String address1;
+        private final String address2;
+
 
         public ShippingInformation make() {
             return ShippingInformation.builder()
                     .city(this.city)
-                    .country(this.country)
                     .receiver(this.receiver)
                     .telephoneNumber(this.telephoneNumber)
-                    .zipCode(this.zipCode)
+                    .address1(this.address1)
+                    .address2(this.address2)
                     .build();
         }
     }
