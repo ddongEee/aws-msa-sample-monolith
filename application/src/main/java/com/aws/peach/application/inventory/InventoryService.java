@@ -22,7 +22,7 @@ public class InventoryService {
 
     private boolean isOutOfStockTodayFor(CheckOrderProduct checkOrderProduct) {
         Inventory inventoryForToday = repository.findByProductIdAndDate(checkOrderProduct.productId, LocalDate.now());
-        return inventoryForToday.getCount() < checkOrderProduct.quantity;
+        return inventoryForToday != null && inventoryForToday.getCount() < checkOrderProduct.quantity;
     }
 
     public int getCountFor(final String productId, final LocalDate date) {
