@@ -30,6 +30,10 @@ public class Order {
         this.orderState = OrderState.PAY_COMPLETE;
     }
 
+    public void checkedPaid() {
+        this.orderState = OrderState.PAID;
+    }
+
     public String getOrdererId() {
         return this.orderer.getMemberId();
     }

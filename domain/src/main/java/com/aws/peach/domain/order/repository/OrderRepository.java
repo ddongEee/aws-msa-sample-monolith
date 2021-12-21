@@ -14,5 +14,9 @@ public interface OrderRepository {
 
     public Order findById(String orderId);
 
-    List<Order> findByOrderDate(LocalDate targetDate);
+    List<Order> findByOrderDate(final LocalDate targetDate);
+
+    List<Order> findByOrderNumberIn(final List<String> orderNumbers);
+
+    void saveAll(final List<Order> paidUpdatedOrders);
 }
