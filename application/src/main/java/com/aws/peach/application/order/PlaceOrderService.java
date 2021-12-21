@@ -11,6 +11,7 @@ import com.aws.peach.domain.product.Products;
 import com.aws.peach.domain.product.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,7 @@ import static com.aws.peach.application.inventory.InventoryService.*;
 @Component
 public class PlaceOrderService {
     private final InventoryService inventoryService;
-    private final OrderRepository  orderRepository;
+    private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
 
@@ -32,13 +33,12 @@ public class PlaceOrderService {
                              final ProductRepository productRepository
     ) {
         this.inventoryService = inventoryService;
-        this.orderRepository  = orderRepository;
+        this.orderRepository = orderRepository;
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
     }
 
     public String placeOrder(final PlaceOrderRequest request) {
-
         List<CheckOrderProduct> checkOrderProducts = request.getOrderLines().stream()
                 .map(m -> CheckOrderProduct.of(m.getProductId(), m.getQuantity()))
                 .collect(Collectors.toList());
@@ -67,22 +67,28 @@ public class PlaceOrderService {
                 ).collect(Collectors.toList());
 
         // 05. 주문을 생성한다.
+        // 주문은 '결제대기' 상태로 생성되어야 한다.
         final Order order = Order.builder()
                 .orderNo(orderNo)
                 .orderer(Orderer.builder().memberId(member.getMemberId()).name(member.getMemberName()).build())
                 .orderLines(orderLines)
-                .shippingInformation(ShippingInformation.builder()
-                        .city(request.getShippingRequest().getCity())
-                        .country(request.getShippingRequest().getCountry())
-                        .receiver(request.getShippingRequest().getReceiver())
-                        .telephoneNumber(request.getShippingRequest().getTelephoneNumber())
-                        .zipCode(request.getShippingRequest().getZipCode()).build())
-                        .orderState(OrderState.CREATED)
+                .orderState(OrderState.UNPAID)
+                .shippingInformation(makeShippingInformationFrom(request.getShippingRequest()))
                 .build();
 
         // 04. 주문을 저장한다.
         Order savedOrder = orderRepository.save(order);
         return savedOrder.getOrderNo();
+    }
+
+    private ShippingInformation makeShippingInformationFrom(ShippingRequest request) {
+        return ShippingInformation.builder()
+                .city(request.getCity())
+                .telephoneNumber(request.getTelephoneNumber())
+                .receiver(request.getReceiver())
+                .address1(request.getAddress1())
+                .address2(request.getAddress2())
+                .build();
     }
 
     @Getter
@@ -92,7 +98,8 @@ public class PlaceOrderService {
         private final String orderer;                       // 주문자 (회원아이디)
         private final List<OrderRequestLine> orderLines;    // 주문상품과 배송지 정보
         private ShippingRequest shippingRequest;
-        public List<String> getProductIds(){
+
+        public List<String> getProductIds() {
             return this.orderLines.stream().map(OrderRequestLine::getProductId).collect(Collectors.toList());
         }
     }
@@ -107,13 +114,13 @@ public class PlaceOrderService {
     @Getter
     @Builder
     @AllArgsConstructor
+    @EqualsAndHashCode
     public static class ShippingRequest {
-
-        private String country;
         private String city;
-        private String zipCode;
         private String telephoneNumber;
         private String receiver;
+        private String address1;
+        private String address2;
     }
 
 }

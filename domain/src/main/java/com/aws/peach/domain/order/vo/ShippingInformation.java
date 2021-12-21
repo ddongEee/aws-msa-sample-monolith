@@ -6,10 +6,9 @@ import lombok.Getter;
 @Builder
 @Getter
 public class ShippingInformation {
-
-    private String country;
     private String city;
-    private String zipCode;
     private String telephoneNumber;
     private String receiver;
+    private String address1;
+    private String address2;
 }

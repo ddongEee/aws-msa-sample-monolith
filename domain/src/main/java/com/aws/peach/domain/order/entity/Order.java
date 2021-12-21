@@ -1,9 +1,7 @@
 package com.aws.peach.domain.order.entity;
 
 import com.aws.peach.domain.order.vo.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;

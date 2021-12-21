@@ -3,12 +3,10 @@ package com.aws.peach.infrastructure.dummy;
 import com.aws.peach.domain.order.entity.Order;
 import com.aws.peach.domain.order.repository.OrderRepository;
 import com.aws.peach.domain.order.vo.*;
-import com.aws.peach.domain.product.entity.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class OrderDummyRepository implements OrderRepository {
@@ -26,7 +24,7 @@ public class OrderDummyRepository implements OrderRepository {
     @Override
     public Order findById(String orderId) {
         // 04. 제품 주문 정보를 생성한다.
-        List<OrderLine> orderLines = new ArrayList<OrderLine>();
+        List<OrderLine> orderLines = new ArrayList<>();
 
         orderLines.add(OrderLine.builder().orderProduct(
                 OrderProduct.builder()
@@ -37,18 +35,18 @@ public class OrderDummyRepository implements OrderRepository {
                 .build());
 
         // 05. 주문을 생성한다.
-        final Order order = Order.builder()
+        return Order.builder()
                 .orderNo(OrderNo.builder().number("1").build())
                 .orderer(Orderer.builder().memberId("PeachMan").name("Lee Heejong").build())
                 .orderLines(orderLines)
-                .shippingInformation(ShippingInformation.builder()
-                        .city("Seoul")
-                        .country("South Korea")
-                        .receiver("Kim HakSung")
-                        .telephoneNumber("010-1234-1234")
-                        .zipCode("12345").build())
                 .orderState(OrderState.PAY_COMPLETE)
+                .shippingInformation(ShippingInformation.builder()
+                        .city("서울")
+                        .telephoneNumber("01012341234")
+                        .receiver("정우영")
+                        .address1("송파구 문정동 70-6")
+                        .address2("202호")
+                        .build())
                 .build();
-        return order;
     }
 }
