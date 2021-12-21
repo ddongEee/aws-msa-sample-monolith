@@ -1,7 +1,7 @@
 package com.aws.peach.interfaces.api;
 
 
-import com.aws.peach.application.OrderViewService;
+import com.aws.peach.application.order.OrderViewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.aws.peach.application.OrderViewService.GroupedOrderStatementDto;
+import static com.aws.peach.application.order.OrderViewService.GroupedOrderStatementDto;
 
 @Slf4j
 @RestController
