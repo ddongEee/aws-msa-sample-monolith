@@ -57,22 +57,28 @@ public class Order {
         return new OrderLinesSummary(this.orderLines);
     }
 
-
-
-
     public static final class OrderLinesSummary {
+        public static final int SHIPPING_CHARGE_FOR_2_BOX = 5_000;
         @Getter private final String orderedProductNameAndQuantities;
         @Getter private final int totalPrice;
+        @Getter private final int shippingCharge;
 
         private OrderLinesSummary(final List<OrderLine> orderLines) {
             final StringBuilder orderedProductNameAndQuantities = new StringBuilder();
             final AtomicInteger totalPrice = new AtomicInteger(0);
+            final AtomicInteger totalQuantity = new AtomicInteger(0);
             orderLines.forEach(orderLine -> {
                 orderedProductNameAndQuantities.append(orderLine.getProductNameAndQuantity());
                 totalPrice.addAndGet(orderLine.calculateAmounts());
+                totalQuantity.addAndGet(orderLine.getQuantity());
             });
             this.orderedProductNameAndQuantities = orderedProductNameAndQuantities.toString();
-            this.totalPrice = totalPrice.get();
+            this.shippingCharge = calculateShippingCharge(totalQuantity.get());
+            this.totalPrice = totalPrice.get() + shippingCharge;
+        }
+
+        private int calculateShippingCharge(int totalQuantity) {
+            return SHIPPING_CHARGE_FOR_2_BOX * (totalQuantity / 2);
         }
     }
 }

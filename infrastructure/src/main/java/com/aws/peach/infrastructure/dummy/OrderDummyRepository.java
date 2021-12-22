@@ -43,7 +43,9 @@ public class OrderDummyRepository implements OrderRepository {
         orderLines.add(OrderLine.builder().orderProduct(
                 OrderProduct.builder()
                         .productName("복숭아")
-                        .productId("1").build()
+                        .productId("1")
+                        .price(30_000)
+                        .build()
                 )
                 .quantity(10)
                 .build());
