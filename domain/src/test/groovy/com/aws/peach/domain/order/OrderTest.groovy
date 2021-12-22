@@ -1,28 +1,14 @@
 import com.aws.peach.domain.order.entity.Order
-import com.aws.peach.domain.order.vo.OrderLine
-import com.aws.peach.domain.order.vo.OrderNo
-import com.aws.peach.domain.order.vo.OrderProduct
-import com.aws.peach.domain.order.vo.OrderState
-import com.aws.peach.domain.order.vo.Orderer
-import com.aws.peach.domain.order.vo.ShippingInformation
+import com.aws.peach.domain.order.exception.OrderStateException
+import com.aws.peach.domain.order.vo.*
 import com.google.common.collect.Lists
 import spock.lang.Specification
-
-import java.time.LocalDate
 
 class OrderTest extends Specification {
 
     def "calculate shipping charge"() {
         given:
         Order order = Order.builder()
-                .orderNo(OrderNo.builder()
-                        .number("ORDER-NO-1")
-                        .build()
-                )
-                .orderer(Orderer.builder()
-                        .memberId("wooyounj")
-                        .name("정우영")
-                        .build())
                 .orderLines(
                         Lists.asList(
                                 OrderLine.builder()
@@ -45,22 +31,70 @@ class OrderTest extends Specification {
                                         .build()
                         )
                 )
-                .orderDate(LocalDate.now())
                 .orderState(OrderState.UNPAID)
-                .shippingInformation(
-                        ShippingInformation.builder()
-                                .city("서울")
-                                .receiver("김학성")
-                                .telephoneNumber("010-1234-1234")
-                                .address1("송파구 송파동")
-                                .address2("XX 아파트 505호")
-                                .build()
-                )
                 .build()
         when:
         Order.OrderLinesSummary summary = order.getOrderLinesSummary()
         then:
         summary.getShippingCharge() == 20_000
         summary.getTotalPrice() == 30_000 * 4 + 10_000 * 5 + summary.getShippingCharge()
+    }
+
+    def "change order state to SHIPPED happy case"() {
+        given:
+        Order order = Order.builder()
+                .orderState(OrderState.PACKAGING)
+                .build()
+        when:
+        order.ship()
+        then:
+        order.getOrderState() == OrderState.SHIPPED
+    }
+
+    def "if current order status is not PACKAGING, changing order state to SHIPPED should be failed"() {
+        given:
+        Order order
+
+        when:
+        order = Order.builder().orderState(OrderState.UNPAID).build()
+        order.ship()
+
+        then:
+        thrown(OrderStateException)
+
+        when:
+        order = Order.builder().orderState(OrderState.PAID).build()
+        order.ship()
+
+        then:
+        thrown(OrderStateException)
+
+        when:
+        order = Order.builder().orderState(OrderState.PREPARING).build()
+        order.ship()
+
+        then:
+        thrown(OrderStateException)
+
+        when:
+        order = Order.builder().orderState(OrderState.SHIPPED).build()
+        order.ship()
+
+        then:
+        thrown(OrderStateException)
+
+        when:
+        order = Order.builder().orderState(OrderState.CLOSED).build()
+        order.ship()
+
+        then:
+        thrown(OrderStateException)
+
+        when:
+        order = Order.builder().orderState(OrderState.CANCELED).build()
+        order.ship()
+
+        then:
+        thrown(OrderStateException)
     }
 }

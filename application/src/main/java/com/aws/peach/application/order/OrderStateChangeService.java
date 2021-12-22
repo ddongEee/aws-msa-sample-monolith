@@ -14,11 +14,15 @@ public class OrderStateChangeService {
     }
 
     public void changeOrderState(DeliveryChangeEvent event) {
-        Order order = orderRepository.findById(event.getOrderNo());
-        if(order == null) {
-            return;
+        // TODO: 일단 SHIPPED 상태만 구현
+        if ("SHIPPED".equalsIgnoreCase(event.getStatus())) {
+            Order order = orderRepository.findById(event.getOrderNo());
+            if(order == null) {
+                // 대상 order가 없으면 그냥 종료
+                return;
+            }
+            order.ship();
+            orderRepository.save(order);
         }
-//        order.
-//        if(event.getStatus())
     }
 }

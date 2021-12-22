@@ -2,6 +2,7 @@ package com.aws.peach.infrastructure.configuration;
 
 import com.aws.peach.domain.delivery.DeliveryChangeEvent;
 import com.aws.peach.domain.order.OrderStateChangeMessage;
+import com.aws.peach.domain.support.MessageProducer;
 import com.aws.peach.domain.support.MessageConsumer;
 import com.aws.peach.infrastructure.kafka.KafkaInfras;
 import com.aws.peach.infrastructure.kafka.KafkaMessageConsumerFactory;
@@ -50,12 +51,12 @@ public class KafkaMessageConfiguration {
                         .build()
         );
     }
+
     @Bean
     public KafkaMessageListenerContainer<String, DeliveryChangeEvent> deliveryChangeEventConsumer(@Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers,
                                                                                                   @Value("${kafka.topic.delivery-change-event}") final String topic,
                                                                                                   @Value("${kafka.topic.delivery-change-event-group-id}") final String groupId,
                                                                                                   final MessageConsumer<DeliveryChangeEvent> deliveryChangeEventConsumer) {
-
         return kafkaMessageConsumerFactory.create(
                 KafkaMessageConsumerFactory.ConsumerProperties.<DeliveryChangeEvent>builder()
                         .serverUrl(bootstrapServers)
