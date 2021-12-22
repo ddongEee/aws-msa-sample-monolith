@@ -1,5 +1,6 @@
 package com.aws.peach.infrastructure.configuration;
 
+import com.aws.peach.domain.order.OrderStateChangeMessage;
 import com.aws.peach.domain.support.MessageConsumer;
 import com.aws.peach.domain.support.MessageProducer;
 import com.aws.peach.infrastructure.kafka.KafkaInfras;
@@ -27,25 +28,26 @@ public class KafkaMessageConfiguration {
     }
 
     /* Producer */
-//    @Bean
-//    public MessageProducer<String, AlbumEventMessage> albumMessageProducer(@Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers,
-//                                                                           @Value("${kafka.topic.album-event}") final String topic) {
-//        return kafkaMessageProducerFactory.create(bootstrapServers, topic);
-//    }
+
+    @Bean
+    public MessageProducer<String, OrderStateChangeMessage> orderStateChangeMessageProducer(@Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers,
+                                                                                            @Value("${kafka.topic.order-state-change}") final String topic) {
+        return kafkaMessageProducerFactory.create(bootstrapServers, topic);
+    }
 
     /* Consumer */
-//    @Bean
-//    public KafkaMessageListenerContainer<String, AlbumEventMessage> albumMessageConsumer(@Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers,
-//                                                                                         @Value("${kafka.topic.album-event}") final String topic,
-//                                                                                         final MessageConsumer<AlbumEventMessage> albumEventConsumer) {
-//        return kafkaMessageConsumerFactory.create(
-//                KafkaMessageConsumerFactory.ConsumerProperties.<AlbumEventMessage>builder()
-//                        .serverUrl(bootstrapServers)
-//                        .topic(topic)
-//                        .groupId("aws-vodservice") // todo : 주입받기
-//                        .messageType(AlbumEventMessage.class)
-//                        .messageConsumer(albumEventConsumer)
-//                        .build()
-//        );
-//    }
+    @Bean
+    public KafkaMessageListenerContainer<String, OrderStateChangeMessage> albumMessageConsumer(@Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers,
+                                                                                               @Value("${kafka.topic.order-state-change}") final String topic,
+                                                                                               final MessageConsumer<OrderStateChangeMessage> albumEventConsumer) {
+        return kafkaMessageConsumerFactory.create(
+                KafkaMessageConsumerFactory.ConsumerProperties.<OrderStateChangeMessage>builder()
+                        .serverUrl(bootstrapServers)
+                        .topic(topic)
+                        .groupId("aws-vodservice") // todo : 주입받기
+                        .messageType(OrderStateChangeMessage.class)
+                        .messageConsumer(albumEventConsumer)
+                        .build()
+        );
+    }
 }
