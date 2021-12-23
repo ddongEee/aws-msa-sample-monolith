@@ -1,8 +1,9 @@
 package com.aws.peach.infrastructure.configuration;
 
+import com.aws.peach.domain.delivery.DeliveryChangeEvent;
 import com.aws.peach.domain.order.OrderStateChangeMessage;
-import com.aws.peach.domain.support.MessageConsumer;
 import com.aws.peach.domain.support.MessageProducer;
+import com.aws.peach.domain.support.MessageConsumer;
 import com.aws.peach.infrastructure.kafka.KafkaInfras;
 import com.aws.peach.infrastructure.kafka.KafkaMessageConsumerFactory;
 import com.aws.peach.infrastructure.kafka.KafkaMessageProducerFactory;
@@ -15,7 +16,7 @@ import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 
 @Slf4j
 @Configuration
-@ComponentScan(basePackageClasses = { KafkaInfras.class})
+@ComponentScan(basePackageClasses = {KafkaInfras.class})
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class KafkaMessageConfiguration {
     private final KafkaMessageProducerFactory kafkaMessageProducerFactory;
@@ -47,6 +48,22 @@ public class KafkaMessageConfiguration {
                         .groupId("aws-vodservice") // todo : 주입받기
                         .messageType(OrderStateChangeMessage.class)
                         .messageConsumer(albumEventConsumer)
+                        .build()
+        );
+    }
+
+    @Bean
+    public KafkaMessageListenerContainer<String, DeliveryChangeEvent> deliveryChangeEventMessageConsumer(@Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers,
+                                                                                                  @Value("${kafka.topic.delivery-event}") final String topic,
+                                                                                                  @Value("${kafka.topic.delivery-event-group-id}") final String groupId,
+                                                                                                  final MessageConsumer<DeliveryChangeEvent> deliveryChangeEventMessageConsumer) {
+        return kafkaMessageConsumerFactory.create(
+                KafkaMessageConsumerFactory.ConsumerProperties.<DeliveryChangeEvent>builder()
+                        .serverUrl(bootstrapServers)
+                        .topic(topic)
+                        .groupId(groupId)
+                        .messageType(DeliveryChangeEvent.class)
+                        .messageConsumer(deliveryChangeEventMessageConsumer)
                         .build()
         );
     }

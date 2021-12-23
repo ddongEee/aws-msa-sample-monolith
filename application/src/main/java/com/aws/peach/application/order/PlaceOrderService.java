@@ -11,14 +11,13 @@ import com.aws.peach.domain.product.Products;
 import com.aws.peach.domain.product.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.aws.peach.application.inventory.InventoryService.*;
+import static com.aws.peach.application.inventory.InventoryService.CheckOrderProduct;
 
 @Component
 public class PlaceOrderService {

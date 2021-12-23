@@ -1,5 +1,6 @@
 package com.aws.peach.domain.order.entity;
 
+import com.aws.peach.domain.order.exception.OrderStateException;
 import com.aws.peach.domain.order.vo.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,6 +56,13 @@ public class Order {
 
     public OrderLinesSummary getOrderLinesSummary() {
         return new OrderLinesSummary(this.orderLines);
+    }
+
+    public void ship() {
+        if (this.orderState != OrderState.PACKAGING) {
+            throw new OrderStateException();
+        }
+        this.orderState = OrderState.SHIPPED;
     }
 
     public static final class OrderLinesSummary {
