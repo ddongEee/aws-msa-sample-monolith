@@ -1,18 +1,16 @@
 package com.aws.peach.domain.delivery;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-
+@Getter // for producer(jsonSerialize). can be replace with @JsonProperty("field_name") on each field
 @Builder
-@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE) // for consumer(jsonDeserialize)
+@AllArgsConstructor(access = AccessLevel.PRIVATE) // for producer
 public class DeliveryChangeEvent {
-    private final String deliveryId;
-    private final String orderNo;
-    private final Address sendingAddress;
-    private final Address shippingAddress;
-    private final String status;
-    private final String updatedAt;
+    private String deliveryId;
+    private String orderNo;
+    private Address sendingAddress;
+    private Address shippingAddress;
+    private String status;
+    private String updatedAt;
 }

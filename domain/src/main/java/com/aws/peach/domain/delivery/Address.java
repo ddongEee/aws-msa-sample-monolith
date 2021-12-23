@@ -1,14 +1,15 @@
 package com.aws.peach.domain.delivery;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-@Getter
+@Getter // for producer(jsonSerialize). can be replace with @JsonProperty("field_name") on each field
 @Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE) // for consumer(jsonDeserialize)
+@AllArgsConstructor(access = AccessLevel.PRIVATE) // for producer
 public class Address {
-    private final String name;
-    private final String city;
-    private final String telephone;
-    private final String address1;
-    private final String address2;
+    private String name;
+    private String city;
+    private String telephone;
+    private String address1;
+    private String address2;
 }
