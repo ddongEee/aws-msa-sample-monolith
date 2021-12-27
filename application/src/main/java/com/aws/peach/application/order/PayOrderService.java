@@ -33,7 +33,7 @@ public class PayOrderService {
 
         paidUpdatedOrders.forEach(order -> {
             final String orderNumber = order.getOrderNo();
-            OrderStateChangeMessage orderStateChangeMessage = OrderStateChangeMessage.paidCompleted(orderNumber);
+            OrderStateChangeMessage orderStateChangeMessage = OrderStateChangeMessage.paidCompleted(order);
             orderStateChangeMessageProducer.send(orderNumber, orderStateChangeMessage);
         });
 
