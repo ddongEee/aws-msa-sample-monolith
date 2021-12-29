@@ -6,10 +6,7 @@ import com.aws.peach.domain.order.vo.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.aws.peach.infrastructure.dummy.OrderDummyRepository.DummyShippingInformation.EUNJU_SHIPPING_INFORMATION;
@@ -20,9 +17,11 @@ import static com.aws.peach.infrastructure.dummy.OrderDummyRepository.ProductTyp
 @Component
 public class OrderDummyRepository implements OrderRepository {
     private final List<Order> dummyOrders;
+    private final Map<String, OrderState> orderId2OrderState;
 
     public OrderDummyRepository() {
         this.dummyOrders = loadDummyOrders();
+        this.orderId2OrderState = new HashMap<>();
     }
 
     @Override
@@ -32,6 +31,7 @@ public class OrderDummyRepository implements OrderRepository {
 
     @Override
     public Order save(Order order) {
+        this.orderId2OrderState.put(order.getOrderNo(), order.getOrderState());
         return order;
     }
 
@@ -55,7 +55,7 @@ public class OrderDummyRepository implements OrderRepository {
                 .orderNo(OrderNo.builder().number("1").build())
                 .orderer(Orderer.builder().memberId("PeachMan").name("Lee Heejong").build())
                 .orderLines(orderLines)
-                .orderState(OrderState.PAID)
+                .orderState(this.orderId2OrderState.get(orderId))
                 .orderDate(LocalDate.now())
                 .shippingInformation(ShippingInformation.builder()
                         .city("서울")
@@ -84,7 +84,9 @@ public class OrderDummyRepository implements OrderRepository {
 
     @Override
     public void saveAll(List<Order> paidUpdatedOrders) {
-        // todo: 당장 적용필요 없음
+        paidUpdatedOrders.forEach(paidOrder -> {
+            this.orderId2OrderState.put(paidOrder.getOrderNo(), OrderState.PAID);
+        });
     }
 
     @AllArgsConstructor
