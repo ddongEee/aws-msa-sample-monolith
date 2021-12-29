@@ -8,26 +8,52 @@ import com.aws.peach.domain.order.vo.OrderState
 import spock.lang.Specification
 
 class OrderStateChangeServiceTest extends Specification {
-    def "change state to CLOSED happy case"() {
+
+    String orderId = "ORDER-1"
+    OrderRepository repository
+    OrderStateChangeService service
+
+    def setup() {
+        repository = Mock()
+        service = new OrderStateChangeService(repository)
+    }
+
+    def "change order state in response to delivery event"(OrderState oldOrderState,
+                                                           DeliveryChangeEvent.Status deliveryEventStatus,
+                                                           OrderState newOrderState) {
         given:
-        Order order = Order.builder()
-                .orderNo(OrderNo.builder().number("ORDER-1").build())
-                .orderState(OrderState.SHIPPED)
-                .build()
-        Order savedOrder
-        OrderRepository repository = Spy()
-        OrderStateChangeService service = new OrderStateChangeService(repository);
-        DeliveryChangeEvent event = DeliveryChangeEvent.builder()
-                .orderNo("ORDER-1")
-                .status(DeliveryChangeEvent.Status.DELIVERED.name())
-                .build()
+        Order order = createOrder(orderId, oldOrderState)
+        DeliveryChangeEvent event = createDeliveryEvent(orderId, deliveryEventStatus)
 
         when:
         service.changeOrderState(event)
 
         then:
-        1 * repository.findById("ORDER-1") >> order
-        1 * repository.save(_ as Order) >> { argument -> savedOrder=argument[0]}
-        savedOrder.getOrderState() == OrderState.CLOSED
+        1 * repository.findById(orderId) >> order
+        1 * repository.save({
+            it instanceof Order
+            it.getOrderState() == newOrderState
+        })
+
+        where:
+        oldOrderState           |   deliveryEventStatus                     |   newOrderState
+        OrderState.PAID         |   DeliveryChangeEvent.Status.PREPARING    |   OrderState.PREPARING
+        OrderState.PREPARING    |   DeliveryChangeEvent.Status.PACKAGING    |   OrderState.PACKAGING
+        OrderState.PACKAGING    |   DeliveryChangeEvent.Status.SHIPPED      |   OrderState.SHIPPED
+        OrderState.SHIPPED      |   DeliveryChangeEvent.Status.DELIVERED    |   OrderState.CLOSED
+    }
+
+    static Order createOrder(String orderId, OrderState orderState) {
+        return Order.builder()
+                .orderNo(OrderNo.builder().number(orderId).build())
+                .orderState(orderState)
+                .build()
+    }
+
+    static DeliveryChangeEvent createDeliveryEvent(String orderId, DeliveryChangeEvent.Status deliveryStatus) {
+        return DeliveryChangeEvent.builder()
+                .orderNo(orderId)
+                .status(deliveryStatus.name())
+                .build()
     }
 }

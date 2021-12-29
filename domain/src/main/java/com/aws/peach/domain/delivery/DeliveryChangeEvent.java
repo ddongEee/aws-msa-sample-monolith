@@ -7,6 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // for consumer(jsonDeserialize)
 @AllArgsConstructor(access = AccessLevel.PRIVATE) // for producer
+@ToString
 public class DeliveryChangeEvent {
     private String deliveryId;
     private String orderNo;
@@ -16,11 +17,26 @@ public class DeliveryChangeEvent {
     private String updatedAt;
 
     @JsonIgnore
-    public boolean isDeliveredStatus() {
+    public boolean isPreparing() {
+        return Status.PREPARING.name().equals(this.status);
+    }
+
+    @JsonIgnore
+    public boolean isPackaging() {
+        return Status.PACKAGING.name().equals(this.status);
+    }
+
+    @JsonIgnore
+    public boolean isShipped() {
+        return Status.SHIPPED.name().equals(this.status);
+    }
+
+    @JsonIgnore
+    public boolean isDelivered() {
         return Status.DELIVERED.name().equals(this.status);
     }
 
-    private enum Status {
+    public enum Status {
         ORDER_RECEIVED, PREPARING, PACKAGING, SHIPPED, DELIVERED;
     }
 }
