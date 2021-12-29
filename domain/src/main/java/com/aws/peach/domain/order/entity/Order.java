@@ -65,6 +65,13 @@ public class Order {
         this.orderState = OrderState.SHIPPED;
     }
 
+    public void close() {
+        if (this.orderState != OrderState.SHIPPED) {
+            throw new OrderStateException();
+        }
+        this.orderState = OrderState.CLOSED;
+    }
+
     public static final class OrderLinesSummary {
         public static final int SHIPPING_CHARGE_FOR_2_BOX = 5_000;
         @Getter private final String orderedProductNameAndQuantities;
