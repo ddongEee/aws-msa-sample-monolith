@@ -58,11 +58,32 @@ public class Order {
         return new OrderLinesSummary(this.orderLines);
     }
 
+    public void prepare() {
+        if (this.orderState != OrderState.PAID) {
+            throw new OrderStateException();
+        }
+        this.orderState = OrderState.PREPARING;
+    }
+
+    public void pack() {
+        if (this.orderState != OrderState.PREPARING) {
+            throw new OrderStateException();
+        }
+        this.orderState = OrderState.PACKAGING;
+    }
+
     public void ship() {
         if (this.orderState != OrderState.PACKAGING) {
             throw new OrderStateException();
         }
         this.orderState = OrderState.SHIPPED;
+    }
+
+    public void close() {
+        if (this.orderState != OrderState.SHIPPED) {
+            throw new OrderStateException();
+        }
+        this.orderState = OrderState.CLOSED;
     }
 
     public static final class OrderLinesSummary {
