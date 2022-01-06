@@ -55,7 +55,7 @@ public class KafkaMessageConfiguration {
     @Bean
     public KafkaMessageListenerContainer<String, DeliveryChangeEvent> deliveryChangeEventMessageConsumer(@Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers,
                                                                                                   @Value("${kafka.topic.delivery-event}") final String topic,
-                                                                                                  @Value("${kafka.topic.delivery-event-group-id}") final String groupId,
+                                                                                                  @Value("${spring.kafka.consumer.group-id}") final String groupId,
                                                                                                   final MessageConsumer<DeliveryChangeEvent> deliveryChangeEventMessageConsumer) {
         return kafkaMessageConsumerFactory.create(
                 KafkaMessageConsumerFactory.ConsumerProperties.<DeliveryChangeEvent>builder()
