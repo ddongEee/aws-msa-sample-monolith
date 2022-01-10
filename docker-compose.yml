@@ -1,14 +1,14 @@
 version: '2'
 services:
-  # monolith-db:
-  #   image: postgres:13
-  #   environment:
-  #     TZ: Asiz/Seoul
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: postgres1234
-  #   healthcheck:
-  #     test: ["CMD", "pg_isready", "-U", "postgres"]
-  #   restart: unless-stopped
+  monolith-db:
+    image: postgres:13
+    environment:
+      TZ: Asiz/Seoul
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres1234
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+    restart: unless-stopped
 
   monolith:
     build:
