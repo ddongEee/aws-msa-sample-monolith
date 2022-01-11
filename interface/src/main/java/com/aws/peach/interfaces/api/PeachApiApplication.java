@@ -1,6 +1,7 @@
 package com.aws.peach.interfaces.api;
 
 import com.aws.peach.configuration.PeachApiContextConfig;
+import com.aws.peach.infrastructure.configuration.api.PeachApiInfrastructureContextConfig;
 import com.aws.peach.domain.inventory.entity.Inventory;
 import com.aws.peach.domain.inventory.repository.InventoryRepository;
 import com.aws.peach.domain.member.Member;
@@ -38,8 +39,7 @@ import static com.aws.peach.infrastructure.dummy.OrderDummyRepository.ProductTyp
 @SpringBootApplication
 @Import(value = {
 		PeachApiContextConfig.class,
-		KafkaMessageConfiguration.class,
-		DummyConfiguration.class
+		PeachApiInfrastructureContextConfig.class
 })
 public class PeachApiApplication {
 	public static void main(String[] args) {
