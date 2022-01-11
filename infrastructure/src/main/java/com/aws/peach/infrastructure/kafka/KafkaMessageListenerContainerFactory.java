@@ -53,8 +53,6 @@ public class KafkaMessageListenerContainerFactory {
     private <M> ContainerProperties containerProps(final String topic, final MessageConsumer<M> messageConsumer) {
         ContainerProperties containerProps = new ContainerProperties(topic);
         containerProps.setMessageListener((MessageListener<String,M>) data -> messageConsumer.consume(data.value()));
-        // TODO: https://docs.spring.io/spring-kafka/reference/html/#default-eh
-        containerProps.setAckMode(ContainerProperties.AckMode.RECORD);
         return containerProps;
     }
 
