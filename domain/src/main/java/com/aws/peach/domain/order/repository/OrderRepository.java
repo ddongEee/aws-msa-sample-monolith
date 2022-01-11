@@ -1,22 +1,15 @@
 package com.aws.peach.domain.order.repository;
 
 import com.aws.peach.domain.order.entity.Order;
-import com.aws.peach.domain.order.vo.OrderNo;
+import com.aws.peach.domain.order.vo.OrderNumber;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface OrderRepository {
-
-    public OrderNo nextOrderNo();
-
-    public Order save(final Order order);
-
-    public Order findById(String orderId);
-
+public interface OrderRepository extends OrderRepositoryCustom {
+    Order save(final Order order);
+    List<Order> save(List<Order> orders);
+    Order findById(String orderId);
     List<Order> findByOrderDate(final LocalDate targetDate);
-
-    List<Order> findByOrderNumberIn(final List<String> orderNumbers);
-
-    void saveAll(final List<Order> paidUpdatedOrders);
+    List<Order> findByOrderNumberIn(final List<OrderNumber> orderNumbers);
 }

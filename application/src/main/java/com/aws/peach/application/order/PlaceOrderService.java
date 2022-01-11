@@ -48,10 +48,10 @@ public class PlaceOrderService {
         }
 
         // 02. 상품 목록을 조회한다.
-        final Products products = Products.create(this.productRepository.findByIds(request.getProductIds()));
+        final Products products = Products.create(this.productRepository.findByIdIn(request.getProductIds()));
 
         // 02. 주문을 번호를 생성한다.
-        final OrderNo orderNo = this.orderRepository.nextOrderNo();
+        final OrderNumber orderNumber = this.orderRepository.nextOrderNo();
 
         // 03. 회원 정보를 조회한다.
         final Member member = this.memberRepository.findByMemberId(request.getOrderer());
@@ -68,7 +68,7 @@ public class PlaceOrderService {
         // 05. 주문을 생성한다.
         // 주문은 '결제대기' 상태로 생성되어야 한다.
         final Order order = Order.builder()
-                .orderNo(orderNo)
+                .orderNumber(orderNumber)
                 .orderer(Orderer.builder().memberId(member.getMemberId()).name(member.getMemberName()).build())
                 .orderLines(orderLines)
                 .orderState(OrderState.UNPAID)
@@ -77,7 +77,7 @@ public class PlaceOrderService {
 
         // 04. 주문을 저장한다.
         Order savedOrder = orderRepository.save(order);
-        return savedOrder.getOrderNo();
+        return savedOrder.getOrderNumber();
     }
 
     private ShippingInformation makeShippingInformationFrom(ShippingRequest request) {

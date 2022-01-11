@@ -72,7 +72,7 @@ project(':application') {
 
 project(':domain') {
     dependencies {
-        //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation group: 'com.github.derjust', name: 'spring-data-dynamodb', version: '5.1.0'
     }
 }
@@ -85,7 +85,7 @@ project(':infrastructure') {
         implementation group: 'com.github.derjust', name: 'spring-data-dynamodb', version: '5.1.0'
         implementation 'org.springframework.kafka:spring-kafka'
         runtimeOnly 'mysql:mysql-connector-java'
-        //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
 
 //        implementation group: 'software.amazon.awssdk', name: 'auth', version: '2.16.92'

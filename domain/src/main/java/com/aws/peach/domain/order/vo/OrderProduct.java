@@ -1,13 +1,25 @@
 package com.aws.peach.domain.order.vo;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 @Builder
 @Getter
+@Embeddable
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderProduct {
+
+    @Column(name = "productId")
     private String productId;
+
+    @Column(name = "productName")
     private String productName;
+
+    @Column(name = "price")
     private int price;
 }
 /*

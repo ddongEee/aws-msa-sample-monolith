@@ -46,7 +46,7 @@ public class OrderStatementExporter {
         public static GroupedOrderStatement create(final Order order) {
             Order.OrderLinesSummary orderLinesSummary = order.getOrderLinesSummary();
             OrderStatement orderStatement = OrderStatement.builder()
-                    .orderNumber(order.getOrderNo())
+                    .orderNumber(order.getOrderNumber())
                     .orderedProductNameAndQuantities(orderLinesSummary.getOrderedProductNameAndQuantities())
                     .calculatedPrice(orderLinesSummary.getTotalPrice())
                     .build();
@@ -61,7 +61,7 @@ public class OrderStatementExporter {
         public GroupedOrderStatement update(final Order order) {
             Order.OrderLinesSummary orderLinesSummary = order.getOrderLinesSummary();
             OrderStatement orderStatement = OrderStatement.builder()
-                    .orderNumber(order.getOrderNo())
+                    .orderNumber(order.getOrderNumber())
                     .orderedProductNameAndQuantities(orderLinesSummary.getOrderedProductNameAndQuantities())
                     .calculatedPrice(orderLinesSummary.getTotalPrice())
                     .build();

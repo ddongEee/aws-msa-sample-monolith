@@ -2,27 +2,48 @@ package com.aws.peach.domain.order.entity;
 
 import com.aws.peach.domain.order.exception.OrderStateException;
 import com.aws.peach.domain.order.vo.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Entity
 @Getter
 @Builder
-@AllArgsConstructor
+@ToString
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Table(schema = "samplemonolith", name = "orders")
+@EqualsAndHashCode(of = "id")
 public class Order {
-    private OrderNo orderNo;
+    @Id
+    @Column(name = "orderId")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Embedded
+    private OrderNumber orderNumber;
+
+    @Embedded
     private Orderer orderer;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "orderNumber")
     private List<OrderLine> orderLines;
+
+    @Column(name = "orderState")
     private OrderState orderState;
+
+    @Column(name = "orderDate")
     private LocalDate orderDate;
+
+    @Embedded
     private ShippingInformation shippingInformation;
 
-    public String getOrderNo(){
-        return this.orderNo.getNumber();
+    public String getOrderNumber(){
+        return this.orderNumber.getOrderNumber();
     }
 
     public void payComplete() {

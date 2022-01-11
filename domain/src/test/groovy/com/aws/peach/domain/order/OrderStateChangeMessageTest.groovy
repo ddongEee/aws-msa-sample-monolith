@@ -2,7 +2,7 @@ package com.aws.peach.domain.order
 
 import com.aws.peach.domain.order.entity.Order
 import com.aws.peach.domain.order.vo.OrderLine
-import com.aws.peach.domain.order.vo.OrderNo
+import com.aws.peach.domain.order.vo.OrderNumber
 import com.aws.peach.domain.order.vo.OrderProduct
 import com.aws.peach.domain.order.vo.OrderState
 import com.aws.peach.domain.order.vo.Orderer
@@ -20,7 +20,7 @@ class OrderStateChangeMessageTest extends Specification {
         OrderStateChangeMessage msg = OrderStateChangeMessage.paidCompleted(order)
 
         then:
-        msg.getOrderNumber() == order.getOrderNo()
+        msg.getOrderNumber() == order.getOrderNumber()
         msg.getOrdererId() == order.getOrdererId()
         msg.getOrdererName() == order.getOrdererName()
         msg.getOrderLines().size() == order.getOrderLines().size()
@@ -55,7 +55,7 @@ class OrderStateChangeMessageTest extends Specification {
                 .build()
 
         return Order.builder()
-                .orderNo(new OrderNo("123"))
+                .orderNumber(new OrderNumber("123"))
                 .orderer(orderer)
                 .orderLines(orderLines)
                 .orderState(OrderState.UNPAID)

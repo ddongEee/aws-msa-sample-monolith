@@ -1,41 +1,31 @@
 package com.aws.peach.infrastructure.dummy;
 
 import com.aws.peach.domain.order.entity.Order;
-import com.aws.peach.domain.order.repository.OrderRepository;
 import com.aws.peach.domain.order.vo.*;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static com.aws.peach.infrastructure.dummy.OrderDummyRepository.DummyShippingInformation.EUNJU_SHIPPING_INFORMATION;
-import static com.aws.peach.infrastructure.dummy.OrderDummyRepository.DummyShippingInformation.HAKSUNG_SHIPPING_INFORMATION;
-import static com.aws.peach.infrastructure.dummy.OrderDummyRepository.ProductType.GOLD_PEACH;
-import static com.aws.peach.infrastructure.dummy.OrderDummyRepository.ProductType.PEACH;
-
-@Component
-public class OrderDummyRepository implements OrderRepository {
-    private final List<Order> dummyOrders;
+public class OrderDummyRepository {
     private final Map<String, OrderState> orderId2OrderState;
 
     public OrderDummyRepository() {
-        this.dummyOrders = loadDummyOrders();
         this.orderId2OrderState = new HashMap<>();
     }
 
-    @Override
-    public OrderNo nextOrderNo() {
-        return new OrderNo("1");
-    }
+//    @Override
+//    public OrderNo nextOrderNo() {
+//        return new OrderNo("1");
+//    }
 
-    @Override
+//    @Override
     public Order save(Order order) {
-        this.orderId2OrderState.put(order.getOrderNo(), order.getOrderState());
+        this.orderId2OrderState.put(order.getOrderNumber(), order.getOrderState());
         return order;
     }
 
-    @Override
+//    @Override
     public Order findById(String orderId) {
         // 04. 제품 주문 정보를 생성한다.
         List<OrderLine> orderLines = new ArrayList<>();
@@ -52,7 +42,7 @@ public class OrderDummyRepository implements OrderRepository {
 
         // 05. 주문을 생성한다.
         return Order.builder()
-                .orderNo(OrderNo.builder().number("1").build())
+                .orderNumber(OrderNumber.builder().orderNumber("1").build())
                 .orderer(Orderer.builder().memberId("PeachMan").name("Lee Heejong").build())
                 .orderLines(orderLines)
                 .orderState(this.orderId2OrderState.get(orderId))
@@ -67,27 +57,27 @@ public class OrderDummyRepository implements OrderRepository {
                 .build();
     }
 
-    @Override
-    public List<Order> findByOrderDate(LocalDate targetDate) {
-        return this.dummyOrders.stream()
-                .filter(o -> o.isEqualDate(targetDate))
-                .filter(Order::isUnPaid)
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<Order> findByOrderDate(LocalDate targetDate) {
+//        return this.dummyOrders.stream()
+//                .filter(o -> o.isEqualDate(targetDate))
+//                .filter(Order::isUnPaid)
+//                .collect(Collectors.toList());
+//    }
 
-    @Override
-    public List<Order> findByOrderNumberIn(List<String> orderNumbers) {
-        return dummyOrders.stream()
-                .filter(o -> orderNumbers.contains(o.getOrderNo()))
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<Order> findByOrderNumberIn(List<String> orderNumbers) {
+//        return dummyOrders.stream()
+//                .filter(o -> orderNumbers.contains(o.getOrderNo()))
+//                .collect(Collectors.toList());
+//    }
 
-    @Override
-    public void saveAll(List<Order> paidUpdatedOrders) {
-        paidUpdatedOrders.forEach(paidOrder -> {
-            this.orderId2OrderState.put(paidOrder.getOrderNo(), OrderState.PAID);
-        });
-    }
+//    @Override
+//    public void saveAll(List<Order> paidUpdatedOrders) {
+//        paidUpdatedOrders.forEach(paidOrder -> {
+//            this.orderId2OrderState.put(paidOrder.getOrderNo(), OrderState.PAID);
+//        });
+//    }
 
     @AllArgsConstructor
     public enum DummyShippingInformation {
@@ -140,49 +130,5 @@ public class OrderDummyRepository implements OrderRepository {
                     .quantity(quantity)
                     .build();
         }
-    }
-
-    private List<Order> loadDummyOrders() {
-        return Arrays.asList(Order.builder()
-                        .orderNo(OrderNo.builder().number("1").build())
-                        .orderer(Orderer.builder().memberId("PeachMan").name("Lee Heejong").build())
-                        .orderLines(Collections.singletonList(PEACH.makeOrderProduct(10)))
-                        .shippingInformation(HAKSUNG_SHIPPING_INFORMATION.make())
-                        .orderState(OrderState.UNPAID) // todo : crayon : 어제 주문이지만 아직 결제가 안된 케이스 커버는?
-                        .orderDate(LocalDate.now()) // 어제
-                        .build(),
-                Order.builder()
-                        .orderNo(OrderNo.builder().number("2").build())
-                        .orderer(Orderer.builder().memberId("PeachMan").name("Lee Heejong").build())
-                        .orderLines(Collections.singletonList(PEACH.makeOrderProduct(20)))
-                        .shippingInformation(HAKSUNG_SHIPPING_INFORMATION.make())
-                        .orderState(OrderState.UNPAID)
-                        .orderDate(LocalDate.now()) // 오늘
-                        .build(),
-                Order.builder()
-                        .orderNo(OrderNo.builder().number("3").build())
-                        .orderer(Orderer.builder().memberId("PeachMan").name("Lee Heejong").build())
-                        .orderLines(Arrays.asList(PEACH.makeOrderProduct(20), GOLD_PEACH.makeOrderProduct(10)))
-                        .shippingInformation(EUNJU_SHIPPING_INFORMATION.make())
-                        .orderState(OrderState.UNPAID)
-                        .orderDate(LocalDate.now()) // 오늘
-                        .build(),
-                Order.builder()
-                        .orderNo(OrderNo.builder().number("4").build())
-                        .orderer(Orderer.builder().memberId("HealthMan").name("Jung Wooyoung").build())
-                        .orderLines(Arrays.asList(PEACH.makeOrderProduct(10), GOLD_PEACH.makeOrderProduct(10)))
-                        .shippingInformation(EUNJU_SHIPPING_INFORMATION.make())
-                        .orderState(OrderState.UNPAID)
-                        .orderDate(LocalDate.now()) // 오늘
-                        .build(),
-                Order.builder()
-                        .orderNo(OrderNo.builder().number("5").build())
-                        .orderer(Orderer.builder().memberId("CookieMan").name("Kim Haksung").build())
-                        .orderLines(Arrays.asList(PEACH.makeOrderProduct(5), GOLD_PEACH.makeOrderProduct(5)))
-                        .shippingInformation(EUNJU_SHIPPING_INFORMATION.make())
-                        .orderState(OrderState.UNPAID) // 결제됨
-                        .orderDate(LocalDate.now()) // 오늘
-                        .build()
-        );
     }
 }

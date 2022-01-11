@@ -3,7 +3,7 @@ package com.aws.peach.application.order
 import com.aws.peach.domain.delivery.DeliveryChangeEvent
 import com.aws.peach.domain.order.entity.Order
 import com.aws.peach.domain.order.repository.OrderRepository
-import com.aws.peach.domain.order.vo.OrderNo
+import com.aws.peach.domain.order.vo.OrderNumber
 import com.aws.peach.domain.order.vo.OrderState
 import spock.lang.Specification
 
@@ -45,7 +45,7 @@ class OrderStateChangeServiceTest extends Specification {
 
     static Order createOrder(String orderId, OrderState orderState) {
         return Order.builder()
-                .orderNo(OrderNo.builder().number(orderId).build())
+                .orderNumber(OrderNumber.builder().orderNumber(orderId).build())
                 .orderState(orderState)
                 .build()
     }

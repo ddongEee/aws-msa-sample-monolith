@@ -6,5 +6,5 @@ import com.aws.peach.domain.product.entity.Product;
 import java.util.List;
 
 public interface ProductRepository {
-    List<Product> findByIds(List<String> productIds);
+    List<Product> findByIdIn(List<String> productIds);
 }

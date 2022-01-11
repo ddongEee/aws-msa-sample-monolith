@@ -29,7 +29,7 @@ public class OrderStateChangeMessage {
         List<OrderLineDto> orderLines = getOrderLineDtos(order.getOrderLines());
         ShippingInformationDto shipping = getShippingInformationDto(order.getShippingInformation());
         return builder()
-                .orderNumber(order.getOrderNo())
+                .orderNumber(order.getOrderNumber())
                 .ordererId(order.getOrdererId())
                 .ordererName(order.getOrdererName())
                 .orderLines(orderLines)
