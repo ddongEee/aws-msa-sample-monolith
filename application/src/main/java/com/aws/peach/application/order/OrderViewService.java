@@ -11,14 +11,11 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.aws.peach.domain.order.statement.OrderStatementExporter.*;
 import static com.aws.peach.domain.order.statement.OrderStatementExporter.GroupedOrderStatement.*;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class OrderViewService {
@@ -32,7 +29,7 @@ public class OrderViewService {
         this.orderStatementExporter = orderStatementExporter;
     }
 
-    public Order getOrder(final String orderId) {
+    public Optional<Order> getOrder(final Long orderId) {
         return this.orderRepository.findById(orderId);
     }
 

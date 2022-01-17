@@ -3,9 +3,11 @@ package com.aws.peach.application.order;
 import com.aws.peach.domain.delivery.DeliveryChangeEvent;
 import com.aws.peach.domain.order.entity.Order;
 import com.aws.peach.domain.order.repository.OrderRepository;
+import com.aws.peach.domain.support.exception.InvalidMessageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 @Component
@@ -18,27 +20,28 @@ public class OrderStateChangeService {
     }
 
     public void changeOrderState(DeliveryChangeEvent event) {
+        Long orderNo = Long.parseLong(event.getOrderNo());
         if (event.isPreparing()) {
-            updateOrderState(event.getOrderNo(), Order::prepare);
+            updateOrderState(orderNo, Order::prepare);
         } else if (event.isPackaging()) {
-            updateOrderState(event.getOrderNo(), Order::pack);
+            updateOrderState(orderNo, Order::pack);
         } else if (event.isShipped()) {
-            updateOrderState(event.getOrderNo(), Order::ship);
+            updateOrderState(orderNo, Order::ship);
         } else if (event.isDelivered()) {
-            updateOrderState(event.getOrderNo(), Order::close);
+            updateOrderState(orderNo, Order::close);
         } else {
-            // TODO send invalid message to DLT
             log.warn("DeliveryChangeEvent not eligible for order state change: {}", event);
+            throw new InvalidMessageException();
         }
     }
 
-    private void updateOrderState(String orderNo, Consumer<Order> updater) {
-        Order order = orderRepository.findById(orderNo);
-        if(order == null) {
+    private void updateOrderState(long orderNo, Consumer<Order> updater) {
+        Optional<Order> order = orderRepository.findById(orderNo);
+        if(order.isEmpty()) {
             // 대상 order가 없으면 그냥 종료
             return;
         }
-        updater.accept(order);
-        orderRepository.save(order);
+        updater.accept(order.get());
+        orderRepository.save(order.get());
     }
 }
