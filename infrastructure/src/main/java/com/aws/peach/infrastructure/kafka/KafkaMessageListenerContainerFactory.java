@@ -1,6 +1,8 @@
 package com.aws.peach.infrastructure.kafka;
 
+import com.aws.peach.domain.order.exception.OrderException;
 import com.aws.peach.domain.support.MessageConsumer;
+import com.aws.peach.domain.support.exception.InvalidMessageException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.TopicPartition;
@@ -16,7 +18,9 @@ import org.springframework.kafka.support.serializer.StringOrBytesSerializer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.backoff.FixedBackOff;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -49,8 +53,6 @@ public class KafkaMessageListenerContainerFactory {
     private <M> ContainerProperties containerProps(final String topic, final MessageConsumer<M> messageConsumer) {
         ContainerProperties containerProps = new ContainerProperties(topic);
         containerProps.setMessageListener((MessageListener<String,M>) data -> messageConsumer.consume(data.value()));
-        // TODO: https://docs.spring.io/spring-kafka/reference/html/#default-eh
-        containerProps.setAckMode(ContainerProperties.AckMode.RECORD);
         return containerProps;
     }
 
@@ -67,6 +69,16 @@ public class KafkaMessageListenerContainerFactory {
             log.error("Message re-routed to '{}' ({}). Record info: {}", topic, exception.getMessage(), record);
             return new TopicPartition(topic, record.partition());
         });
-        return new DefaultErrorHandler(recoverer, new FixedBackOff(1000L, 2L));
+        DefaultErrorHandler defaultErrorHandler = new DefaultErrorHandler(recoverer, new FixedBackOff(1000L, 2L));
+        defaultErrorHandler.addNotRetryableExceptions(notRetryableExceptions());
+        return defaultErrorHandler;
+    }
+
+    private Class<? extends Exception>[] notRetryableExceptions() {
+        List<Class<? extends Exception>> list = Arrays.asList(
+                InvalidMessageException.class,
+                OrderException.class
+        );
+        return list.toArray(new Class[0]);
     }
 }

@@ -16,6 +16,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8080:8080
+    labels:      
+      - traefik.enable=true
+      - traefik.http.routers.monolith.entrypoints=web
+      - traefik.http.routers.monolith.rule=Host(`monolith.localhost`)
     environment:
       SPRING_KAFKA_BOOTSTRAP-SERVERS: broker:29092
     depends_on:
