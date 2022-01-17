@@ -35,7 +35,7 @@ ps:
 
 .PHONY: build
 build:
-	./gradlew clean build --exclude-task test
+	./gradlew clean build
 
 .PHONY: clean
 clean: stop build start
