@@ -21,6 +21,15 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"orderer\": \"isheejong\",\n\"orderLines\": [\n    {\"productId\":\"GOOD-PEACH-1\", \"quantity\":5}\n],\n\"shippingRequest\": {\n    \"city\":\"서울\",\n    \"telephoneNumber\":\"01012341234\",\n    \"receiver\":\"정우영\",\n    \"address1\":\"송파구 문정동 70-6\",\n    \"address2\":\"202호\"\n}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://{{MONOLITH_HOST}}/orders",
 					"protocol": "http",
@@ -40,13 +49,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{MONOLITH_HOST}}/orders",
+					"raw": "http://{{MONOLITH_HOST}}/orders/:orderId",
 					"protocol": "http",
 					"host": [
 						"{{MONOLITH_HOST}}"
 					],
 					"path": [
-						"orders"
+						"orders",
+						":orderId"
+					],
+					"variable": [
+						{
+							"key": "orderId",
+							"value": "{{orderNo}}"
+						}
 					]
 				}
 			},
@@ -199,6 +215,67 @@
 						{
 							"key": "orderNo",
 							"value": "{{orderNo}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[D]배송 검색 (결제완료)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.collectionVariables.set(\"deliveryId\", jsonData.deliveryId);",
+							"pm.collectionVariables.set(\"orderNo\", jsonData.orderNo);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orderNo\": \"1\",\n  \"orderer\": {\n    \"memberId\": \"PeachMan\",\n    \"name\": \"Lee Heejong\"\n  },\n  \"orderLines\": [\n    {\n      \"orderProduct\": {\n        \"productId\": \"1\",\n        \"productName\": \"복숭아\",\n        \"price\": 0\n      },\n      \"quantity\": 10\n    }\n  ],\n  \n  \"orderDate\": \"2021-12-16T05:29:23Z\",\n  \"shippingInformation\": {\n    \"country\": \"South Korea\",\n    \"city\": \"Seoul\",\n    \"zipCode\": \"12345\",\n    \"telephoneNumber\": \"010-1234-1234\",\n    \"receiver\": \"Kim HakSung\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{DELIVERY_HOST}}/delivery/searches?pageNo=0&pageSize=10&state=paid",
+					"protocol": "http",
+					"host": [
+						"{{DELIVERY_HOST}}"
+					],
+					"path": [
+						"delivery",
+						"searches"
+					],
+					"query": [
+						{
+							"key": "pageNo",
+							"value": "0",
+							"description": "default 0"
+						},
+						{
+							"key": "pageSize",
+							"value": "10",
+							"description": "default 10"
+						},
+						{
+							"key": "state",
+							"value": "paid",
+							"description": "paid, preparing, packaging, shipped, delivered"
 						}
 					]
 				}

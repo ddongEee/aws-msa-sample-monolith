@@ -30,7 +30,7 @@ public class OrderNumber implements Serializable {
         return orderNumber;
     }
 
-    public static OrderNumber create(final String number) {
-        return new OrderNumber(number);
+    public static OrderNumber create(final String orderNumber) {
+        return new OrderNumber(orderNumber);
     }
 }

@@ -22,6 +22,10 @@ public class Products {
         return this.productMap.get(productId).getName();
     }
 
+    public int getProductPrice(final String productId){
+        return this.productMap.get(productId).getPrice();
+    }
+
     public Product getProduct(final String productId){
         return this.productMap.get(productId);
     }
