@@ -39,3 +39,5 @@ services:
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
     restart: unless-stopped
+    volumes:
+      - ./infrastructure/src/main/resources/create-schema-postgres.sql:/docker-entrypoint-initdb.d/create_tables.sql
