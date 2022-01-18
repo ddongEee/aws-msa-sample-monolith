@@ -30,7 +30,7 @@ public class PayOrderService {
         List<Order> paidUpdatedOrders = foundOrders.stream()
                 .peek(Order::checkedPaid)
                 .collect(Collectors.toList());
-        orderRepository.save(paidUpdatedOrders);
+        orderRepository.saveAll(paidUpdatedOrders);
 
         paidUpdatedOrders.forEach(order -> {
             final String orderNumber = order.getOrderNumber();

@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,11 +60,14 @@ public class PlaceOrderService {
         // 04. 제품 주문 정보를 생성한다.
         final List<OrderLine> orderLines = request.getOrderLines().stream()
                 .map(m -> OrderLine.builder()
-                        .quantity(m.getQuantity())
-                        .orderProduct(OrderProduct.builder()
-                                .productId(m.getProductId())
-                                .productName(products.getProductName(m.getProductId())).build()).build()
-                ).collect(Collectors.toList());
+                                .quantity(m.getQuantity())
+                                .orderProduct(OrderProduct.builder()
+                                                .productId(m.getProductId())
+                                                .productName(products.getProductName(m.getProductId()))
+                                                .price(products.getProductPrice(m.getProductId()))
+                                                .build())
+                                .build())
+                .collect(Collectors.toList());
 
         // 05. 주문을 생성한다.
         // 주문은 '결제대기' 상태로 생성되어야 한다.
@@ -72,6 +76,7 @@ public class PlaceOrderService {
                 .orderer(Orderer.builder().memberId(member.getMemberId()).name(member.getMemberName()).build())
                 .orderLines(orderLines)
                 .orderState(OrderState.UNPAID)
+                .orderDate(LocalDate.now())
                 .shippingInformation(makeShippingInformationFrom(request.getShippingRequest()))
                 .build();
 

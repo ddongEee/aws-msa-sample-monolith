@@ -22,14 +22,14 @@ class OrderStateChangeServiceTest extends Specification {
                                                            DeliveryChangeEvent.Status deliveryEventStatus,
                                                            OrderState newOrderState) {
         given:
-        Order order = createOrder(orderId, oldOrderState)
+        Optional<Order> order = createOrder(orderId, oldOrderState)
         DeliveryChangeEvent event = createDeliveryEvent(orderId, deliveryEventStatus)
 
         when:
         service.changeOrderState(event)
 
         then:
-        1 * repository.findById(orderId) >> order
+        1 * repository.findById(new OrderNumber(orderId)) >> order
         1 * repository.save({
             it instanceof Order
             it.getOrderState() == newOrderState
@@ -43,11 +43,12 @@ class OrderStateChangeServiceTest extends Specification {
         OrderState.SHIPPED      |   DeliveryChangeEvent.Status.DELIVERED    |   OrderState.CLOSED
     }
 
-    static Order createOrder(String orderId, OrderState orderState) {
-        return Order.builder()
+    static Optional<Order> createOrder(String orderId, OrderState orderState) {
+        def order =  Order.builder()
                 .orderNumber(OrderNumber.builder().orderNumber(orderId).build())
                 .orderState(orderState)
                 .build()
+        return Optional.of(order)
     }
 
     static DeliveryChangeEvent createDeliveryEvent(String orderId, DeliveryChangeEvent.Status deliveryStatus) {

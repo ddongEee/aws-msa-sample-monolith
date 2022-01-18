@@ -3,6 +3,7 @@ package com.aws.peach.application.order;
 import com.aws.peach.domain.order.entity.Order;
 import com.aws.peach.domain.order.repository.OrderRepository;
 import com.aws.peach.domain.order.statement.OrderStatementExporter;
+import com.aws.peach.domain.order.vo.OrderNumber;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +30,7 @@ public class OrderViewService {
         this.orderStatementExporter = orderStatementExporter;
     }
 
-    public Optional<Order> getOrder(final Long orderId) {
+    public Optional<Order> getOrder(final OrderNumber orderId) {
         return this.orderRepository.findById(orderId);
     }
 

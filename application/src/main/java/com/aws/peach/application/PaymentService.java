@@ -3,6 +3,7 @@ package com.aws.peach.application;
 import com.aws.peach.domain.order.entity.Order;
 import com.aws.peach.domain.order.exception.OrderNotExistsException;
 import com.aws.peach.domain.order.repository.OrderRepository;
+import com.aws.peach.domain.order.vo.OrderNumber;
 import com.aws.peach.domain.payment.entity.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,9 +23,9 @@ public class PaymentService {
     }
 
     public String payOrder(PayOrderRequest payOrderRequest) {
-        Optional<Order> order = this.orderRepository.findById(payOrderRequest.getOrderId());
+        Optional<Order> order = this.orderRepository.findById(new OrderNumber(payOrderRequest.getOrderNumber()));
         if (order.isEmpty()) {
-            throw new OrderNotExistsException(payOrderRequest.getOrderId());
+            throw new OrderNotExistsException(payOrderRequest.getOrderNumber());
         }
         order.get().payComplete();
 
@@ -36,7 +37,7 @@ public class PaymentService {
     @Builder
     @AllArgsConstructor
     public static final class PayOrderRequest {
-        private Long orderId;
+        private String orderNumber;
     }
 
 }

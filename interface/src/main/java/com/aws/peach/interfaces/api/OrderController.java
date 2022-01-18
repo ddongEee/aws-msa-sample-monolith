@@ -3,6 +3,7 @@ package com.aws.peach.interfaces.api;
 import com.aws.peach.application.order.OrderViewService;
 import com.aws.peach.application.order.PlaceOrderService;
 import com.aws.peach.domain.order.entity.Order;
+import com.aws.peach.domain.order.vo.OrderNumber;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     public ResponseEntity<Order> getOrder(@PathVariable String orderId){
-        Optional<Order> order = this.orderViewService.getOrder(Long.parseLong(orderId));
+        Optional<Order> order = this.orderViewService.getOrder(new OrderNumber(orderId));
         return ResponseEntity.of(order);
     }
 }

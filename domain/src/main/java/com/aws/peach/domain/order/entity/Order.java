@@ -16,14 +16,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(schema = "samplemonolith", name = "orders")
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "orderNumber")
 public class Order {
-    @Id
-    @Column(name = "orderId")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Embedded
+    @EmbeddedId
     private OrderNumber orderNumber;
 
     @Embedded
@@ -42,7 +37,7 @@ public class Order {
     @Embedded
     private ShippingInformation shippingInformation;
 
-    public String getOrderNumber(){
+    public String getOrderNumber() {
         return this.orderNumber.getOrderNumber();
     }
 

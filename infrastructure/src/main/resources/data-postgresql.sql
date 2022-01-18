@@ -1,0 +1,1 @@
+INSERT INTO SAMPLEMONOLITH.PRODUCTS  (productid, name, price) values ('GOOD-PEACH-1', 'Peach', 10000);

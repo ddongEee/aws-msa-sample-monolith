@@ -21,7 +21,7 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity<String> pay() {
-        PayOrderRequest payOrderRequest = PayOrderRequest.builder().orderId(1L).build();
+        PayOrderRequest payOrderRequest = PayOrderRequest.builder().orderNumber("1").build();
         String paymentId = this.paymentService.payOrder(payOrderRequest);
         return ResponseEntity.ok(paymentId);
     }

@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface OrderRepository extends OrderRepositoryCustom {
     Order save(final Order order);
-    List<Order> save(List<Order> orders);
-    Optional<Order> findById(Long id);
+    <S extends Order> List<S> saveAll(Iterable<S> entities);
+    Optional<Order> findById(OrderNumber orderNumber);
     List<Order> findByOrderDate(final LocalDate targetDate);
     List<Order> findByOrderNumberIn(final List<OrderNumber> orderNumbers);
 }
