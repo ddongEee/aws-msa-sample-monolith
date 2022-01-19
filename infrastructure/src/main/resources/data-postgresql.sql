@@ -3,25 +3,25 @@ insert into samplemonolith.products (productid, name, price) values ('2021-PRODU
 insert into samplemonolith.products (productid, name, price) values ('2021-PRODUCT-PEACH-03', '당금도', 20000);
 
 insert into samplemonolith.inventories (inventoryid, "count", "date", productid)
-values (1, 10, to_date('2022/08/11', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
+values (9001, 10, to_date('2022/08/11', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
 insert into samplemonolith.inventories (inventoryid, "count", "date", productid)
-values (2, 10, to_date('2022/08/12', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
+values (9002, 10, to_date('2022/08/12', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
 insert into samplemonolith.inventories (inventoryid, "count", "date", productid)
-values (3, 13, to_date('2022/08/12', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
+values (9003, 13, to_date('2022/08/12', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
 insert into samplemonolith.inventories (inventoryid, "count", "date", productid)
-values (4, 14, to_date('2022/08/12', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
+values (9004, 14, to_date('2022/08/12', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
 insert into samplemonolith.inventories (inventoryid, "count", "date", productid)
-values (5, 17, to_date('2022/08/12', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
+values (9005, 17, to_date('2022/08/12', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
 insert into samplemonolith.inventories (inventoryid, "count", "date", productid)
-values (6,20, to_date('2022/08/12', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
+values (9006,20, to_date('2022/08/12', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-01');
 insert into samplemonolith.inventories (inventoryid, "count", "date", productid)
-values (7,10, to_date('2022/08/20', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-02');
+values (9007,10, to_date('2022/08/20', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-02');
 insert into samplemonolith.inventories (inventoryid, "count", "date", productid)
-values (8,10, to_date('2022/08/21', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-02');
+values (9008,10, to_date('2022/08/21', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-02');
 insert into samplemonolith.inventories (inventoryid, "count", "date", productid)
-values (9,14, to_date('2022/08/20', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-03');
+values (9009,14, to_date('2022/08/20', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-03');
 insert into samplemonolith.inventories (inventoryid, "count", "date", productid)
-values (10,20, to_date('2022/08/21', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-03');
+values (9010,20, to_date('2022/08/21', 'yyyy/mm/dd'), '2021-PRODUCT-PEACH-03');
 
 insert into samplemonolith.members (memberid, membername)
 values ('jieun','아이유');
