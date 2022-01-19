@@ -23,7 +23,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"orderer\": \"isheejong\",\n    \"orderLines\": [\n        {\n            \"productId\": \"GOOD-PEACH-1\",\n            \"quantity\": 5\n        }\n    ],\n    \"shippingRequest\": {\n        \"city\": \"서울\",\n        \"telephoneNumber\": \"01012341234\",\n        \"receiver\": \"정우영\",\n        \"address1\": \"송파구 문정동 70-6\",\n        \"address2\": \"202호\"\n    }\n}",
+					"raw": "{\n    \"orderer\": \"tony\",\n    \"orderLines\": [\n        {\n            \"productId\": \"2021-PRODUCT-PEACH-01\",\n            \"quantity\": 1\n        },\n        {\n            \"productId\": \"2021-PRODUCT-PEACH-02\",\n            \"quantity\": 2\n        },\n        {\n            \"productId\": \"2021-PRODUCT-PEACH-03\",\n            \"quantity\": 3\n        }\n    ],\n    \"shippingRequest\": {\n        \"city\": \"서울\",\n        \"telephoneNumber\": \"01012341234\",\n        \"receiver\": \"박보영\",\n        \"address1\": \"서울시 강남구 테헤란로 100\",\n        \"address2\": \".\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
