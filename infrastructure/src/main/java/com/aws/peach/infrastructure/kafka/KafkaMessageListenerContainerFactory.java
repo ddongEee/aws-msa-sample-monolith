@@ -9,12 +9,10 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.Bytes;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaOperations;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.*;
 import org.springframework.kafka.support.serializer.StringOrBytesSerializer;
+import org.springframework.kafka.transaction.KafkaTransactionManager;
 import org.springframework.stereotype.Component;
 import org.springframework.util.backoff.FixedBackOff;
 
@@ -27,15 +25,22 @@ import java.util.Map;
 @Component
 public class KafkaMessageListenerContainerFactory {
 
+    private final KafkaTransactionManager kafkaTransactionManager;
     private final KafkaTemplate<String, Object> stringOrBytesTemplate;
 
-    public KafkaMessageListenerContainerFactory(@Value("${spring.kafka.bootstrap-servers}") String bootstrapServers) {
-        this.stringOrBytesTemplate = stringOrBytesTemplate(bootstrapServers);
+    public KafkaMessageListenerContainerFactory(@Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers,
+                                                @Value("${spring.kafka.producer.transaction-id-prefix}") final String transactionalIdPrefix,
+                                                @Value("${spring.kafka.producer.acks}") final String acks,
+                                                final KafkaTransactionManager kafkaTransactionManager) {
+        this.kafkaTransactionManager = kafkaTransactionManager;
+        this.stringOrBytesTemplate = stringOrBytesTemplate(bootstrapServers, transactionalIdPrefix, acks);
     }
 
-    private KafkaTemplate<String, Object> stringOrBytesTemplate(final String bootstrapServers) {
+    private KafkaTemplate<String, Object> stringOrBytesTemplate(final String bootstrapServers, final String txIdPrefix,final String acks) {
         DefaultKafkaProducerFactory<String, Object> producerFactory = new DefaultKafkaProducerFactory<>(
-                Map.of(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers),
+                Map.of(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
+                        ProducerConfig.TRANSACTIONAL_ID_CONFIG, txIdPrefix,
+                        ProducerConfig.ACKS_CONFIG, acks),
                 new StringSerializer(), new StringOrBytesSerializer());
         return new KafkaTemplate<>(producerFactory);
     }
@@ -53,6 +58,7 @@ public class KafkaMessageListenerContainerFactory {
     private <M> ContainerProperties containerProps(final String topic, final MessageConsumer<M> messageConsumer) {
         ContainerProperties containerProps = new ContainerProperties(topic);
         containerProps.setMessageListener((MessageListener<String,M>) data -> messageConsumer.consume(data.value()));
+        containerProps.setTransactionManager(kafkaTransactionManager);
         return containerProps;
     }
 

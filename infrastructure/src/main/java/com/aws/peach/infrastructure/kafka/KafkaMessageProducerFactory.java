@@ -2,6 +2,7 @@ package com.aws.peach.infrastructure.kafka;
 
 import com.aws.peach.domain.support.MessageProducer;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.errors.TransactionAbortedException;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,10 @@ public class KafkaMessageProducerFactory {
 
                 @Override
                 public void onFailure(KafkaProducerException ex) {
+                    if (ex.getCause() instanceof TransactionAbortedException) {
+                        log.warn("{}, message=[ {} ]", ex.getMessage(), ex.getFailedProducerRecord());
+                        return;
+                    }
                     log.error("Unable to deliver message: exception=[ {} ], message=[ {} ]",
                             ex.getMessage(), ex.getFailedProducerRecord());
                 }

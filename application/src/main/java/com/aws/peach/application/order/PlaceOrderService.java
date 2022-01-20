@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,6 +39,7 @@ public class PlaceOrderService {
         this.productRepository = productRepository;
     }
 
+    @Transactional(transactionManager = "transactionManager")
     public String placeOrder(final PlaceOrderRequest request) {
         List<CheckOrderProduct> checkOrderProducts = request.getOrderLines().stream()
                 .map(m -> CheckOrderProduct.of(m.getProductId(), m.getQuantity()))
