@@ -7,6 +7,7 @@ import com.aws.peach.domain.order.vo.OrderNumber;
 import com.aws.peach.domain.support.exception.InvalidMessageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -20,6 +21,7 @@ public class OrderStateChangeService {
         this.orderRepository = orderRepository;
     }
 
+    @Transactional(transactionManager = "transactionManager")
     public void changeOrderState(DeliveryChangeEvent event) {
         OrderNumber orderNumber = new OrderNumber(event.getOrderNo());
         if (event.isPreparing()) {

@@ -6,6 +6,7 @@ import com.aws.peach.domain.order.repository.OrderRepository;
 import com.aws.peach.domain.order.vo.OrderNumber;
 import com.aws.peach.domain.support.MessageProducer;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ public class PayOrderService {
         this.orderStateChangeMessageProducer = orderStateChangeMessageProducer;
     }
 
+    @Transactional(transactionManager = "transactionManager")
     public List<String> paid(final List<String> orderNumbers) {
         List<Order> foundOrders = orderRepository.findByOrderNumberIn(OrderNumber.ofList(orderNumbers));
         if (orderNumbers.size() != foundOrders.size()) {
