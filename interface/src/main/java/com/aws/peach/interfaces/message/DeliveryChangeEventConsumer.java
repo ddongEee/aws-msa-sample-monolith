@@ -2,6 +2,7 @@ package com.aws.peach.interfaces.message;
 
 import com.aws.peach.application.order.OrderStateChangeService;
 import com.aws.peach.domain.delivery.DeliveryChangeEvent;
+import com.aws.peach.domain.support.Message;
 import com.aws.peach.domain.support.MessageConsumer;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ public class DeliveryChangeEventConsumer implements MessageConsumer<DeliveryChan
         this.orderStateChangeService = orderStateChangeService;
     }
     @Override
-    public void consume(DeliveryChangeEvent event) {
-        orderStateChangeService.changeOrderState(event);
+    public void consume(Message<DeliveryChangeEvent> message) {
+        orderStateChangeService.changeOrderState(message.getPayload());
     }
 }

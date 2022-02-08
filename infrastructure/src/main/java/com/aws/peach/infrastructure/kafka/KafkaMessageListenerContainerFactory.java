@@ -1,8 +1,10 @@
 package com.aws.peach.infrastructure.kafka;
 
 import com.aws.peach.domain.order.exception.OrderException;
+import com.aws.peach.domain.support.Message;
 import com.aws.peach.domain.support.MessageConsumer;
 import com.aws.peach.domain.support.exception.InvalidMessageException;
+import com.aws.peach.infrastructure.configuration.support.MessageIdUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.TopicPartition;
@@ -53,7 +55,11 @@ public class KafkaMessageListenerContainerFactory {
 
     private <M> ContainerProperties containerProps(final String topic, final MessageConsumer<M> messageConsumer) {
         ContainerProperties containerProps = new ContainerProperties(topic);
-        containerProps.setMessageListener((MessageListener<String,M>) data -> messageConsumer.consume(data.value()));
+        containerProps.setMessageListener((MessageListener<String, M>) record -> {
+            final Message.Id messageId = MessageIdUtils.parse(record.headers());
+            final Message<M> message = new Message<>(messageId, record.key(), record.value());
+            messageConsumer.consume(message);
+        });
         return containerProps;
     }
 
