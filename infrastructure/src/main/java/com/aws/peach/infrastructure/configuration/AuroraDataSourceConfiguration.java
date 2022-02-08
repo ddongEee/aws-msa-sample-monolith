@@ -4,6 +4,7 @@ import com.aws.peach.domain.inventory.entity.Inventory;
 import com.aws.peach.domain.member.Member;
 import com.aws.peach.domain.order.entity.Order;
 import com.aws.peach.domain.order.vo.OrderLine;
+import com.aws.peach.domain.payment.entity.Payment;
 import com.aws.peach.domain.product.entity.Product;
 import com.aws.peach.infrastructure.aurora.AuroraInfras;
 import com.zaxxer.hikari.HikariDataSource;
@@ -28,7 +29,7 @@ import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
-@EntityScan(basePackageClasses = {Member.class, Inventory.class, Order.class, Product.class, OrderLine.class})
+@EntityScan(basePackageClasses = {Member.class, Inventory.class, Order.class, Product.class, OrderLine.class, Payment.class})
 @EnableJpaRepositories(basePackageClasses = {AuroraInfras.class})
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public class AuroraDataSourceConfiguration {
