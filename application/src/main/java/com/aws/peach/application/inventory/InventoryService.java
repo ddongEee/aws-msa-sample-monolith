@@ -5,17 +5,20 @@ import com.aws.peach.domain.inventory.repository.InventoryRepository;
 import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Component
+@Transactional(readOnly = true, transactionManager = "transactionManager")
 public class InventoryService {
     private final InventoryRepository repository;
 
     public InventoryService(final InventoryRepository repository) {
         this.repository = repository;
     }
+
     public boolean isOutOfStock(List<CheckOrderProduct> orderProducts) {
         return orderProducts.stream().anyMatch(this::isOutOfStockTodayFor);
     }
@@ -37,6 +40,7 @@ public class InventoryService {
         return inventory.getCount();
     }
 
+    @Transactional(transactionManager = "transactionManager")
     public Inventory setInventoryCountFor(String productId, LocalDate date, int newInventoryCount) {
         Preconditions.checkNotNull(productId);
         Preconditions.checkNotNull(date);

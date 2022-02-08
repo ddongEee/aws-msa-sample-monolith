@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public class PaymentService {
         this.orderRepository = orderRepository;
     }
 
+    @Transactional(transactionManager = "transactionManager")
     public String payOrder(PayOrderRequest payOrderRequest) {
         Optional<Order> order = this.orderRepository.findById(new OrderNumber(payOrderRequest.getOrderNumber()));
         if (order.isEmpty()) {

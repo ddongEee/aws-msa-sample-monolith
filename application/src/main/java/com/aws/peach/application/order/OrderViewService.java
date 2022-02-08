@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +20,7 @@ import static com.aws.peach.domain.order.statement.OrderStatementExporter.*;
 import static com.aws.peach.domain.order.statement.OrderStatementExporter.GroupedOrderStatement.*;
 
 @Component
+@Transactional(readOnly = true, transactionManager = "transactionManager")
 public class OrderViewService {
 
     private final OrderRepository  orderRepository;
