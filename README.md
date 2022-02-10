@@ -63,3 +63,12 @@
 - 애플리케이션 빌드 및 배포 (CI/CD)  
 - 애플리케이션 모니터링
 
+# Layered Architecture
+- 해당 프로젝트는 DDD(Domain Driven Design)의 전략적인 패턴을 따라 구성되어 있으며, 각 Layer는 별도의 프로젝트로 구성되어 있습니다.
+
+# 적용된 기술 및 개념
+- layered clean architecture
+- java8
+- spring boot
+- kafka
+- lombok
