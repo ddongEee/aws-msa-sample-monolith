@@ -9,3 +9,7 @@ Accept: application/json
 #### 취소
 PUT http://localhost:8080/orders/15/cancel
 Accept: application/json
+
+####
+GET http://localhost:8080/hello
+Accept: application/json

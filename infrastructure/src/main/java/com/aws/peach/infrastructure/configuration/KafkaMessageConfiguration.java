@@ -1,51 +1,61 @@
 package com.aws.peach.infrastructure.configuration;
 
-import com.aws.peach.domain.support.MessageConsumer;
+import com.aws.peach.domain.delivery.DeliveryChangeMessage;
+import com.aws.peach.domain.order.OrderStateChangeMessage;
 import com.aws.peach.domain.support.MessageProducer;
+import com.aws.peach.domain.support.MessageConsumer;
 import com.aws.peach.infrastructure.kafka.KafkaInfras;
-import com.aws.peach.infrastructure.kafka.KafkaMessageConsumerFactory;
+import com.aws.peach.infrastructure.kafka.KafkaMessageListenerContainerFactory;
 import com.aws.peach.infrastructure.kafka.KafkaMessageProducerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 
 @Slf4j
 @Configuration
-@ComponentScan(basePackageClasses = { KafkaInfras.class})
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+@ComponentScan(basePackageClasses = {KafkaInfras.class})
 public class KafkaMessageConfiguration {
-    private final KafkaMessageProducerFactory kafkaMessageProducerFactory;
-    private final KafkaMessageConsumerFactory kafkaMessageConsumerFactory;
+    private final KafkaMessageListenerContainerFactory listenerContainerFactory;
+    private final KafkaMessageProducerFactory producerFactory;
 
-    public KafkaMessageConfiguration(final KafkaMessageProducerFactory kafkaMessageProducerFactory,
-                                     final KafkaMessageConsumerFactory kafkaMessageConsumerFactory) {
-        this.kafkaMessageProducerFactory = kafkaMessageProducerFactory;
-        this.kafkaMessageConsumerFactory = kafkaMessageConsumerFactory;
+    public KafkaMessageConfiguration(KafkaMessageListenerContainerFactory listenerContainerFactory, KafkaMessageProducerFactory producerFactory) {
+        this.listenerContainerFactory = listenerContainerFactory;
+        this.producerFactory = producerFactory;
     }
 
     /* Producer */
-//    @Bean
-//    public MessageProducer<String, AlbumEventMessage> albumMessageProducer(@Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers,
-//                                                                           @Value("${kafka.topic.album-event}") final String topic) {
-//        return kafkaMessageProducerFactory.create(bootstrapServers, topic);
-//    }
+
+    @Bean
+    public MessageProducer<String, OrderStateChangeMessage> orderStateChangeMessageProducer(
+            final KafkaTemplate<String, OrderStateChangeMessage> kafkaTemplate,
+            @Value("${kafka.topic.order-state-change}") final String topic) {
+
+        return this.producerFactory.create(kafkaTemplate, topic);
+    }
 
     /* Consumer */
-//    @Bean
-//    public KafkaMessageListenerContainer<String, AlbumEventMessage> albumMessageConsumer(@Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers,
-//                                                                                         @Value("${kafka.topic.album-event}") final String topic,
-//                                                                                         final MessageConsumer<AlbumEventMessage> albumEventConsumer) {
-//        return kafkaMessageConsumerFactory.create(
-//                KafkaMessageConsumerFactory.ConsumerProperties.<AlbumEventMessage>builder()
-//                        .serverUrl(bootstrapServers)
-//                        .topic(topic)
-//                        .groupId("aws-vodservice") // todo : 주입받기
-//                        .messageType(AlbumEventMessage.class)
-//                        .messageConsumer(albumEventConsumer)
-//                        .build()
-//        );
-//    }
+    @Bean
+    public KafkaMessageListenerContainer<String, OrderStateChangeMessage> orderStateChangeMessageListenerContainer(
+            @Value("${kafka.topic.order-state-change}") final String topic,
+            final MessageConsumer<OrderStateChangeMessage> messageConsumer,
+            final ConsumerFactory<String, OrderStateChangeMessage> consumerFactory,
+            final KafkaTemplate<String, OrderStateChangeMessage> kafkaTemplate) {
+
+        return this.listenerContainerFactory.create(topic, messageConsumer, consumerFactory, kafkaTemplate);
+    }
+
+    @Bean
+    public KafkaMessageListenerContainer<String, DeliveryChangeMessage> deliveryChangeMessageListenerContainer(
+            @Value("${kafka.topic.delivery-change}") final String topic,
+            final MessageConsumer<DeliveryChangeMessage> messageConsumer,
+            final ConsumerFactory<String, DeliveryChangeMessage> consumerFactory,
+            final KafkaTemplate<String, DeliveryChangeMessage> kafkaTemplate) {
+
+        return this.listenerContainerFactory.create(topic, messageConsumer, consumerFactory, kafkaTemplate);
+    }
 }
