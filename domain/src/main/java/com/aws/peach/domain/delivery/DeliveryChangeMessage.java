@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // for consumer(jsonDeserialize)
 @AllArgsConstructor(access = AccessLevel.PRIVATE) // for producer
 @ToString
-public class DeliveryChangeEvent {
+public class DeliveryChangeMessage {
     private String deliveryId;
     private String orderNo;
     private Address sendingAddress;

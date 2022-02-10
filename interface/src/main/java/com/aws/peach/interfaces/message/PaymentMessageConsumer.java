@@ -1,7 +1,7 @@
 package com.aws.peach.interfaces.message;
 
 import com.aws.peach.application.PaymentService;
-import com.aws.peach.domain.payment.PaymentEvent;
+import com.aws.peach.domain.payment.PaymentMessage;
 import com.aws.peach.domain.support.Message;
 import com.aws.peach.domain.support.MessageConsumer;
 import lombok.RequiredArgsConstructor;
@@ -11,18 +11,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PaymentEventConsumer implements MessageConsumer<PaymentEvent> {
+public class PaymentMessageConsumer implements MessageConsumer<PaymentMessage> {
 
     private final PaymentService paymentService;
 
     @Override
-    public void consume(Message<PaymentEvent> message) {
+    public void consume(Message<PaymentMessage> message) {
         Message.Id messageId = message.getMessageId();
         PaymentService.PaymentRequestDto request = convert(message.getPayload());
         paymentService.charge(messageId, request);
     }
 
-    private PaymentService.PaymentRequestDto convert(PaymentEvent payload) {
+    private PaymentService.PaymentRequestDto convert(PaymentMessage payload) {
         return PaymentService.PaymentRequestDto.builder()
                 .cardHolderName(payload.getCardHolderName())
                 .cardNumber(payload.getCardNumber())

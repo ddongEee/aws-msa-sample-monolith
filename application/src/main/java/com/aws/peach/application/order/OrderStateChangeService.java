@@ -1,6 +1,6 @@
 package com.aws.peach.application.order;
 
-import com.aws.peach.domain.delivery.DeliveryChangeEvent;
+import com.aws.peach.domain.delivery.DeliveryChangeMessage;
 import com.aws.peach.domain.order.entity.Order;
 import com.aws.peach.domain.order.repository.OrderRepository;
 import com.aws.peach.domain.order.vo.OrderNumber;
@@ -22,18 +22,18 @@ public class OrderStateChangeService {
     }
 
     @Transactional(transactionManager = "transactionManager")
-    public void changeOrderState(DeliveryChangeEvent event) {
-        OrderNumber orderNumber = new OrderNumber(event.getOrderNo());
-        if (event.isPreparing()) {
+    public void changeOrderState(DeliveryChangeMessage message) {
+        OrderNumber orderNumber = new OrderNumber(message.getOrderNo());
+        if (message.isPreparing()) {
             updateOrderState(orderNumber, Order::prepare);
-        } else if (event.isPackaging()) {
+        } else if (message.isPackaging()) {
             updateOrderState(orderNumber, Order::pack);
-        } else if (event.isShipped()) {
+        } else if (message.isShipped()) {
             updateOrderState(orderNumber, Order::ship);
-        } else if (event.isDelivered()) {
+        } else if (message.isDelivered()) {
             updateOrderState(orderNumber, Order::close);
         } else {
-            log.warn("DeliveryChangeEvent not eligible for order state change: {}", event);
+            log.warn("DeliveryChangeMessage not eligible for order state change: {}", message);
             throw new InvalidMessageException();
         }
     }
