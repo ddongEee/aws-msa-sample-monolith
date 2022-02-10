@@ -37,10 +37,7 @@ import static com.aws.peach.infrastructure.dummy.OrderDummyRepository.ProductTyp
 
 @Slf4j
 @SpringBootApplication
-@Import(value = {
-		PeachApiContextConfig.class,
-		PeachApiInfrastructureContextConfig.class
-})
+@Import(value = {PeachApiContextConfig.class})
 public class PeachApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PeachApiApplication.class, args);
